@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.carrentalapp.R;
 
+//dev-tuanh: testing to add a comment then push to git.
 public class AdminDashboardActivity extends AppCompatActivity {
 
     @Override
