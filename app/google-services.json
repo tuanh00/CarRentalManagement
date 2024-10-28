@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "655767929093",
+    "project_id": "carrentalmanagment",
+    "storage_bucket": "carrentalmanagment.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655767929093:android:62d9fdc09cc7a93f17376c",
+        "android_client_info": {
+          "package_name": "com.example.carrentalapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwQ6Ybku5uvSn11wRm2xJorRY2wec_jaA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655767929093:android:09c052e0a9e7e85f17376c",
+        "android_client_info": {
+          "package_name": "com.example.carrentalmanagment"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwQ6Ybku5uvSn11wRm2xJorRY2wec_jaA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

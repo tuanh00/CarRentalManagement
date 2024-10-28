@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primaryColor">#0D47A1</color> <!-- Navy blue -->
+    <color name="primaryLightColor">#5472D3</color> <!-- Light blue -->
+    <color name="primaryDarkColor">#002171</color> <!-- Dark navy -->
+    <color name="secondaryColor">#FF6F00</color> <!-- Orange -->
+    <color name="secondaryLightColor">#FFA040</color> <!-- Light orange -->
+    <color name="secondaryDarkColor">#C43E00</color> <!-- Dark orange -->
+    <color name="textColor">#FFFFFF</color> <!-- White for text on buttons -->
+    <color name="backgroundColor">#F5F5F5</color> <!-- Light gray for backgrounds -->
+</resources>
