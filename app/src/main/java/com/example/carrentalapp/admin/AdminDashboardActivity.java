@@ -29,8 +29,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         buttonAddCar.setOnClickListener(v -> replaceFragment(new AddCarFragment()));
         buttonViewCars.setOnClickListener(v -> replaceFragment(new ViewCarsFragment()));
     }
-<<<<<<< HEAD
-=======
+
 
     // Function to replace fragments
     private void replaceFragment(Fragment fragment) {
@@ -38,5 +37,4 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 .replace(R.id.fragmentContainer, fragment)
                 .commit();
     }
->>>>>>> 3a8824d (Build admindashboard functions: Add New Car and Display All Cars)
 }
