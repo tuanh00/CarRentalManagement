@@ -22,5 +22,4 @@
         android:backgroundTint="@color/secondaryColor"
         android:textColor="@color/textColor" />
 
-
 </LinearLayout>
