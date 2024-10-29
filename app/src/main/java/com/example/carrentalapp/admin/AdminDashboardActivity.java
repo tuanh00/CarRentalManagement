@@ -11,7 +11,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.carrentalapp.R;
 
 public class AdminDashboardActivity extends AppCompatActivity {
-
+//dev-duy: testing to add a comment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
