@@ -12,12 +12,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.carrentalapp.MainActivity;
+import com.example.carrentalapp.admin.AdminDashboardActivity;
 import com.example.carrentalapp.main.CarRentalApp;
 import com.example.carrentalapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -71,10 +74,21 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(LoginActivity.this, CarRentalApp.class);
-                        startActivity(intent);
-                        finish();
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            String userEmail = user.getEmail();
+                            if ("admin@gmail.com".equalsIgnoreCase(userEmail) || "tuanh@gmail.com".equalsIgnoreCase(userEmail)) {
+                                // If the user is admin
+                                Intent intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                // If the user is a regular user -> navigate to main activity for now
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
                     } else {
                         Toast.makeText(LoginActivity.this, "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
