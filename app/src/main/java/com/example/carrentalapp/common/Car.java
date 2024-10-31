@@ -10,18 +10,26 @@ public class Car {
     private String brand;
     private int seats;
     private String location;
-    private List<String> imageUrls; // Changed to List of image URLs
+    private List<String> imageUrls;
     private double price;
+    private float rating;
+    private int ratingCount;
+    private boolean isAvailable;
 
-    public Car() {  this.imageUrls = new ArrayList<>(); }
+    public Car() {
+        this.imageUrls = new ArrayList<>();
+        this.isAvailable = true;
+    }
 
-    public Car(String model, String brand, int seats, String location, List<String> imageUrls, double price) {
+    public Car(String model, String brand, int seats, String location, List<String> imageUrls, double price, float rating, int ratingCount) {
         this.model = model;
         this.brand = brand;
         this.seats = seats;
         this.location = location;
         this.imageUrls = imageUrls;
         this.price = price;
+        this.rating = rating; //rating star bar
+        this.ratingCount = ratingCount;
     }
 
     // Getters and Setters for each field
@@ -73,5 +81,29 @@ public class Car {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    public int getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(int ratingCount) {
+        this.ratingCount = ratingCount;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
     }
 }

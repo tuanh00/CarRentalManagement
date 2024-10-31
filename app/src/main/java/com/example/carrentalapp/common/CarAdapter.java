@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,8 +41,10 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
             holder.carBrandModel.setText(car.getBrand() + " " + car.getModel());
             holder.carLocation.setText(car.getLocation());
-            holder.carPrice.setText("C$: " + car.getPrice());
-            holder.carSeats.setText("Seats: " + car.getSeats());
+            holder.carPrice.setText(String.valueOf(car.getPrice()));
+            holder.carSeats.setText(String.valueOf(car.getSeats()));
+            holder.carRating.setRating(car.getRating()); //float ?
+            holder.ratingCount.setText(String.valueOf(car.getRatingCount()));
 
             //load the first image from the list of image URLs (if any)
         if(car.getImageUrls() != null && !car.getImageUrls().isEmpty()) {
@@ -62,8 +65,10 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
     }
 
     public static class CarViewHolder extends RecyclerView.ViewHolder {
-        TextView carBrandModel, carLocation, carPrice, carSeats;
+        TextView carBrandModel, carLocation, carPrice, carSeats, ratingCount;
         ImageView carImage;
+        RatingBar carRating;
+
 
         public CarViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -72,6 +77,8 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
             carPrice = itemView.findViewById(R.id.carPrice);
             carSeats = itemView.findViewById(R.id.carSeats);
             carImage = itemView.findViewById(R.id.carImage);
+            carRating = itemView.findViewById(R.id.carRating);
+            ratingCount = itemView.findViewById(R.id.ratingCount);
         }
     }
 }

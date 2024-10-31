@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -13,8 +14,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center_vertical"
-        android:scaleType="centerCrop"
-  />
+        android:scaleType="centerCrop" />
 
     <!-- Car Details -->
     <LinearLayout
@@ -31,31 +31,109 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:text="Brand Model"/>
+            android:text="Brand Model" />
 
-        <!-- Car Location -->
-        <TextView
-            android:id="@+id/carLocation"
+        <!-- Car Location with Icon -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:text="Location: "/>
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
 
-        <!-- Seats Information -->
-        <TextView
-            android:id="@+id/carSeats"
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_location"
+                app:tint="@android:color/black"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="4dp" />
+
+            <TextView
+                android:id="@+id/carLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="Location" />
+        </LinearLayout>
+
+        <!-- Seats Information with Icon -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Seats: "
-            android:textSize="14sp"/>
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
 
-        <!-- Price Information -->
-        <TextView
-            android:id="@+id/carPrice"
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_seat"
+                app:tint="@android:color/black"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="4dp" />
+
+            <TextView
+                android:id="@+id/carSeats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="Seats" />
+        </LinearLayout>
+
+        <!-- Price Information with Icon -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@android:color/holo_green_dark"
-            android:text="Price: C$ 292"/>
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_price"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="4dp"
+                app:tint="@android:color/holo_green_dark" />
+
+            <TextView
+                android:id="@+id/carPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@android:color/holo_green_dark"
+                android:text="292" />
+        </LinearLayout>
+
+        <!-- Rating Bar and Rating Count -->
+        <!-- Rating Bar and Rating Count -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="start"
+            android:layout_marginTop="4dp">
+
+            <!-- Rating Bar for Displaying Rating -->
+            <RatingBar
+                android:id="@+id/carRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:stepSize="0.5"
+                android:layout_gravity="center_vertical"
+                style="?android:attr/ratingBarStyleSmall"
+                />
+
+            <!-- Placeholder for Number of Ratings -->
+            <TextView
+                android:id="@+id/ratingCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(0)"
+                android:textSize="14sp"
+                android:layout_marginStart="8dp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

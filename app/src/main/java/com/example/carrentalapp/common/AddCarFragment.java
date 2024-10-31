@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.carrentalapp.R;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -130,8 +131,12 @@ public class AddCarFragment extends Fragment {
         carData.put("price", price);
         carData.put("location", location);
         carData.put("images", imageUrls);
+        carData.put("rating", 0); //new car by default have no rating
+        carData.put("ratingCount", 0);
+        carData.put("createdAt", FieldValue.serverTimestamp());  // Server timestamp -> filter to display the latest to oldest
+        carData.put("isAvailable", true);
 
-        db.collection("Car").add(carData).addOnSuccessListener(documentReference -> {
+        db.collection("Cars").add(carData).addOnSuccessListener(documentReference -> {
             Toast.makeText(getContext(), "Car added successfully", Toast.LENGTH_SHORT).show();
 
         }).addOnFailureListener(e -> {

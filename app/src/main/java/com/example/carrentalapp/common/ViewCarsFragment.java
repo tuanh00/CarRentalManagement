@@ -52,8 +52,9 @@ public class ViewCarsFragment extends Fragment {
         return view;
     }
 
+    //admin -> all
     private void loadCars(){
-        db.collection("Car").get()
+        db.collection("Cars").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     carList.clear();
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
@@ -66,4 +67,6 @@ public class ViewCarsFragment extends Fragment {
                     Log.d("ViewCarsFragment.java failed load cars", e.getMessage());
                 });
     }
+
+
 }

@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                             } else {
                                 // If the user is a regular user -> navigate to main activity for now
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class); //Customerdashboard
                                 startActivity(intent);
                                 finish();
                             }
