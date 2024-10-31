@@ -66,8 +66,20 @@ public class CustomerDashboardActivity extends AppCompatActivity {
         loadCarData();
 
         searchButton.setOnClickListener(v -> {
-            String searchedText = searchBar.getText().toString();
-            searchCarFunction(searchedText);
+
+            String searchedText = searchBar.getText().toString().trim();
+
+            if(searchedText.isEmpty()){
+                filtersApplied();
+            }
+            else if (!searchedText.isEmpty()) {
+                searchCarFunction(searchedText);
+
+            } else{
+                searchCarFunction(searchedText);
+                filtersApplied();
+            }
+
         });
     }
 
@@ -95,6 +107,7 @@ public class CustomerDashboardActivity extends AppCompatActivity {
                 CustomerDashboardActivity.this,
                 (view, selectedYear, selectedMonth, selectedDay) -> fromDateTime.setText(String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)),
                 year, month, day);
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
         datePickerDialog.show();
     }
 
