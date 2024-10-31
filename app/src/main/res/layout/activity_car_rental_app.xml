@@ -3,16 +3,124 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:padding="16dp"
     android:background="@color/backgroundColor">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- Search Bar -->
+    <EditText
+        android:id="@+id/searchBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Welcome to CarRentalApp"
-        android:textSize="24sp"
-        android:textColor="@color/primaryColor"
-        android:padding="16dp" />
-<!--    28 Oct dev-duy testing-->
+        android:hint="Search"
+        android:padding="12dp"
+        android:background="@color/white"
+        android:layout_marginBottom="16dp"
+        android:textColorHint="@color/black"/>
+
+    <!-- Date Time Inputs -->
+    <EditText
+        android:id="@+id/fromDateTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="From: "
+        android:inputType="none"
+        android:focusable="false"
+        android:clickable="true"
+        android:padding="12dp"
+        android:background="@color/white"
+        android:layout_marginBottom="8dp"
+        android:textColorHint="@color/black"/>
+
+    <EditText
+        android:id="@+id/toDateTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="To:"
+        android:inputType="none"
+        android:focusable="false"
+        android:clickable="true"
+        android:padding="12dp"
+        android:background="@color/white"
+        android:layout_marginBottom="16dp"
+        android:textColorHint="@color/black"/>
+
+
+    <!-- Spinners for Filters -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <Spinner
+                android:id="@+id/seats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:entries="@array/spinner_seats"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:background="@drawable/border_spinner"/>
+
+            <Spinner
+                android:id="@+id/prices"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:entries="@array/spinner_prices"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:background="@drawable/border_spinner"/>
+
+            <Spinner
+                android:id="@+id/brands"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:entries="@array/spinner_brands"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:background="@drawable/border_spinner"/>
+
+            <Spinner
+                android:id="@+id/years"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:entries="@array/spinner_years"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:background="@drawable/border_spinner"/>
+
+            <Spinner
+                android:id="@+id/models"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:entries="@array/spinner_models"
+                android:minHeight="48dp"
+                android:padding="10dp"
+                android:background="@drawable/border_spinner"/>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- ListView -->
+    <ListView
+        android:id="@+id/listViewCar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"/>
+
+    <!-- Sign Out Button -->
     <Button
         android:id="@+id/signOutButton"
         android:layout_width="wrap_content"
@@ -20,6 +128,17 @@
         android:text="Sign Out"
         android:layout_gravity="center"
         android:backgroundTint="@color/secondaryColor"
-        android:textColor="@color/textColor" />
+        android:textColor="@color/textColor"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Search Button -->
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Search for Car"
+        android:backgroundTint="@color/primaryColor"
+        android:textColor="@color/textColor"/>
 
 </LinearLayout>

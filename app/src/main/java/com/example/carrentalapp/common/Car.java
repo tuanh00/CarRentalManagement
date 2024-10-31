@@ -13,9 +13,12 @@ public class Car {
     private List<String> imageUrls; // Changed to List of image URLs
     private double price;
 
+
+
     public Car() {  this.imageUrls = new ArrayList<>(); }
 
     public Car(String model, String brand, int seats, String location, List<String> imageUrls, double price) {
+
         this.model = model;
         this.brand = brand;
         this.seats = seats;
