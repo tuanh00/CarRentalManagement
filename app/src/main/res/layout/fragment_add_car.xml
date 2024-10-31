@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/inputCarModel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Car Model"/>
+
+        <EditText
+            android:id="@+id/inputCarBrand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Car Brand"/>
+
+        <EditText
+            android:id="@+id/inputCarSeats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Seats"
+            android:inputType="number"/>
+
+        <EditText
+            android:id="@+id/inputCarLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Location"/>
+
+        <EditText
+            android:id="@+id/inputCarPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Price"
+            android:inputType="numberDecimal"/>
+
+        <Button
+            android:id="@+id/buttonSelectImages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Images"/>
+
+        <!-- RecyclerView to show selected image previews -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/imageRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="8dp"/>
+
+        <Button
+            android:id="@+id/buttonSubmitCarDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:padding="12dp"/>
+
+    </LinearLayout>
+</ScrollView>

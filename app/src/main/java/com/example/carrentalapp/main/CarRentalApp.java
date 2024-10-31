@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.carrentalapp.R;
 import com.example.carrentalapp.auth.LoginActivity;
+import com.example.carrentalapp.common.AddCarFragment;
+import com.example.carrentalapp.common.Car;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class CarRentalApp extends AppCompatActivity {
@@ -31,5 +33,7 @@ public class CarRentalApp extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+
     }
 }

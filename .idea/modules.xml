@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/CarRentalApp.iml" filepath="$PROJECT_DIR$/.idea/CarRentalApp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CarRentalApp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CarRentalApp.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CarRentalApp.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CarRentalApp.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CarRentalApp.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CarRentalApp.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CarRentalApp.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CarRentalApp.app.unitTest.iml" />
