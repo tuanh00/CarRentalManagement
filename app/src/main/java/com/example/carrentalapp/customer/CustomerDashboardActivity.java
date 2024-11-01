@@ -158,6 +158,8 @@ public class CustomerDashboardActivity extends AppCompatActivity {
                 CustomerDashboardActivity.this,
                 (view, selectedYear, selectedMonth, selectedDay) -> datePickerEditText.setText(String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)),
                 year, month, day);
+
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
         datePickerDialog.show();
     }
 }
