@@ -12,12 +12,15 @@ public class Car {
     private String location;
     private List<String> imageUrls; // Changed to List of image URLs
     private double price;
+    private boolean availability;
 
 
 
     public Car() {  this.imageUrls = new ArrayList<>(); }
 
-    public Car(String model, String brand, int seats, String location, List<String> imageUrls, double price) {
+
+
+    public Car(String model, String brand, int seats, String location, List<String> imageUrls, double price, boolean availability) {
 
         this.model = model;
         this.brand = brand;
@@ -25,6 +28,8 @@ public class Car {
         this.location = location;
         this.imageUrls = imageUrls;
         this.price = price;
+        this.availability = availability;
+
     }
 
     // Getters and Setters for each field
@@ -76,5 +81,13 @@ public class Car {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public boolean isAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(boolean availability) {
+        this.availability = availability;
     }
 }
