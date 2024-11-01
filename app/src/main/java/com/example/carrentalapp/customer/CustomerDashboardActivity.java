@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -63,110 +65,103 @@ import java.util.Locale;
 
 public class CustomerDashboardActivity extends AppCompatActivity {
 
-    private ListView listViewCars;
+    ListView listViewCars;
+    EditText searchBar, fromDateTimePicker, toDateTimePicker;
+    Button searchButton, signOutButton;
+    FirebaseFirestore database;
+    private CarAdapter carAdapter;
 
-    private FirebaseFirestore database;
-    private EditText searchBar, startDate_picker, returnDate_picker;
-    private Button searchButton;
-    final Calendar calendar = Calendar.getInstance();
+    ArrayList<String> carList;
+    ArrayList<Car> searchedCars;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_rental_app);
 
-
-        searchButton = findViewById(R.id.searchButton);
+        listViewCars = findViewById(R.id.listViewCars);
         searchBar = findViewById(R.id.searchBar);
-        startDate_picker = findViewById(R.id.fromDateTimePicker);
-        returnDate_picker = findViewById(R.id.toDateTimePicker);
+        fromDateTimePicker = findViewById(R.id.fromDateTimePicker);
+        toDateTimePicker = findViewById(R.id.toDateTimePicker);
+        searchButton = findViewById(R.id.searchButton);
+        signOutButton = findViewById(R.id.signOutButton);
 
         database = FirebaseFirestore.getInstance();
+        carList = new ArrayList<>();
+        searchedCars = new ArrayList<>();
 
+        loadCarDatas();
 
-        loadData();
+        // Set up date pickers
+        fromDateTimePicker.setOnClickListener(v -> showDatePickerDialog(fromDateTimePicker));
+        toDateTimePicker.setOnClickListener(v -> showDatePickerDialog(toDateTimePicker));
 
-        startDate_picker.setOnClickListener(v -> startingDatePicker());
-        returnDate_picker.setOnClickListener(v -> returningDatePicker());
-
-        searchButton.setOnClickListener(v -> {
-            String searchedText = searchBar.getText().toString().trim();
-            searchCarFunction(searchedText);
-        });
+        // Set up search button click listener
+        searchButton.setOnClickListener(v -> filterCars());
     }
 
-    private void searchCarFunction(String searchedCar) {
-        carsRef.whereEqualTo("availability", true)
-                .addSnapshotListener((value, error) -> {
-                    if (error != null) {
-                        Toast.makeText(this, "Error fetching data.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    List<String> searchedCarList = new ArrayList<>();
-                    if (value != null) {
-                        for (QueryDocumentSnapshot doc : value) {
-                            Car car = doc.toObject(Car.class);
-                            String carInfo = car.getBrand() + " " + car.getModel() + " - C$: " + car.getPrice() + " - Seats: " + car.getSeats();
-
-                            // Check if searched text matches brand or model
-                            if (car.getBrand().toLowerCase().contains(searchedCar.toLowerCase()) ||
-                                    car.getModel().toLowerCase().contains(searchedCar.toLowerCase())) {
-                                searchedCarList.add(carInfo);
+    private void loadCarDatas() {
+        database.collection("Cars").get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        searchedCars.clear();
+                        carList.clear();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Car car = document.toObject(Car.class);
+                            if (car != null && car.isAvailability()) {
+                                searchedCars.add(car);
+                                carList.add(car.getImageUrls() + " " + car.getBrand() + " " + car.getModel() +
+                                        " Number of seats: " + car.getSeats() + " - $" + car.getPrice());
                             }
                         }
+                        updateListView(carList);
+                    } else {
+                        Log.w("Firestore", "Error getting documents.", task.getException());
                     }
-                    updateListView(searchedCarList);
-                    if (searchedCarList.isEmpty()) {
-                        Toast.makeText(this, "No cars match the search criteria.", Toast.LENGTH_SHORT).show();
-                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Failed to retrieve cars", e);
                 });
     }
 
-    // Date picker for start date
-    private void startingDatePicker(){
-        DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
-            calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.MONTH, month);
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            startDate_picker.setText(updateDate());
-        };
-        new DatePickerDialog(CustomerDashboardActivity.this, date, calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+    private void filterCars() {
+        String searchText = searchBar.getText().toString().toLowerCase();
+
+        carList.clear();
+
+        for (Car car : searchedCars) {
+            if (car.getBrand().toLowerCase().contains(searchText) ||
+                    car.getModel().toLowerCase().contains(searchText)) {
+                carList.add(car.getImageUrls() + " " + car.getBrand() + " " + car.getModel() +
+                        " Number of seats: " + car.getSeats() + " - $" + car.getPrice());
+            }
+        }
+        updateListView(carList);
     }
 
-    // Date picker for return date
-    private void returningDatePicker(){
-        DatePickerDialog.OnDateSetListener date = (view, year, month, dayOfMonth) -> {
-            calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.MONTH, month);
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            returnDate_picker.setText(updateDate());
-        };
-        new DatePickerDialog(CustomerDashboardActivity.this, date, calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-    }
-
-    private String updateDate(){
-        String dateFormat = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.CANADA);
-        return simpleDateFormat.format(calendar.getTime());
-    }
-    private void loadData() {
-        ViewCarsFragment fragment = new ViewCarsFragment();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit();
-    }
-
-
-
-    private void updateListView(List<String> carDisplayList) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, carDisplayList);
+    private void updateListView(ArrayList<String> list) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                list
+        );
         listViewCars.setAdapter(adapter);
     }
+
+    private void showDatePickerDialog(EditText datePickerEditText) {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                CustomerDashboardActivity.this,
+                (view, selectedYear, selectedMonth, selectedDay) -> datePickerEditText.setText(String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)),
+                year, month, day);
+        datePickerDialog.show();
+    }
 }
+
 
 
 //private Spinner seatsSpinner, priceSpinner, brandSpinner, yearSpinner, modelSpinner;

@@ -22,7 +22,7 @@
         android:id="@+id/fromDateTimePicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="From: "
+        android:hint="Select desired starting date: "
         android:inputType="none"
         android:focusable="false"
         android:clickable="true"
@@ -35,7 +35,7 @@
         android:id="@+id/toDateTimePicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="To:"
+        android:hint="Select desired returning date::"
         android:inputType="none"
         android:focusable="false"
         android:clickable="true"
@@ -47,10 +47,10 @@
 
 
     <!-- ListView -->
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <ListView
+        android:id="@+id/listViewCars"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"/>
 
     <!-- Sign Out Button -->
     <Button
