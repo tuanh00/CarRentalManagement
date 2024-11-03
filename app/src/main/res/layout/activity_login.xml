@@ -27,6 +27,15 @@
         android:backgroundTint="@color/primaryColor"
         android:textColor="@color/textColor" />
 
+<!--    Google sign button -->
+    <Button
+        android:id="@+id/googleSignInButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login by Gmail"
+        android:backgroundTint="@color/secondaryDarkColor"
+        android:textColor="@color/textColor"
+        />
     <Button
         android:id="@+id/registerLink"
         android:layout_width="match_parent"
@@ -34,4 +43,6 @@
         android:text="Register"
         android:backgroundTint="@color/secondaryColor"
         android:textColor="@color/textColor" />
+    
+    
 </LinearLayout>

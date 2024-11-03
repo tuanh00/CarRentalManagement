@@ -1,5 +1,7 @@
 package com.example.carrentalapp.common;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -47,19 +49,27 @@ public class ViewCarsFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
+        //loadCars() base on role
         loadCars();
 
         return view;
     }
 
-    //admin -> all
+    private boolean isAdminUser() {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("CarRentalAppPrefs", Context.MODE_PRIVATE);
+        return "admin".equals(sharedPreferences.getString("user_role", "customer"));
+    }
+
+    //admin -> view all cars / customer -> only view available cars
     private void loadCars(){
         db.collection("Cars").get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     carList.clear();
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Car car = document.toObject(Car.class);
-                        carList.add(car);
+                        if (isAdminUser() || car.isAvailable()) {  // Admins see all, customers see available only
+                            carList.add(car);
+                        }
                     }
                     carAdapter.notifyDataSetChanged();
                 })

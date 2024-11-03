@@ -2,4 +2,6 @@
     <string name="app_name">CarRentalApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="default_web_client_id">655767929093-cq5ftoug40gea1lb90cnrd0cqi272kil.apps.googleusercontent.com</string>
+
 </resources>

@@ -12,7 +12,28 @@
           "package_name": "com.example.carrentalapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "655767929093-d3442mfps8an9a5t5l7fr0lap5tstd9l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.carrentalapp",
+            "certificate_hash": "c6d3ea831931c4a7a9b81d8edfc7e0fc4e0f56c3"
+          }
+        },
+        {
+          "client_id": "655767929093-m9vbfbamh9t4nbdhe4oi0rtfnj96p573.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.carrentalapp",
+            "certificate_hash": "42056b377efbb0d17d630a59f2e9c4422ddd8893"
+          }
+        },
+        {
+          "client_id": "655767929093-cq5ftoug40gea1lb90cnrd0cqi272kil.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCwQ6Ybku5uvSn11wRm2xJorRY2wec_jaA"
@@ -20,26 +41,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:655767929093:android:09c052e0a9e7e85f17376c",
-        "android_client_info": {
-          "package_name": "com.example.carrentalmanagment"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCwQ6Ybku5uvSn11wRm2xJorRY2wec_jaA"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "655767929093-cq5ftoug40gea1lb90cnrd0cqi272kil.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

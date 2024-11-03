@@ -103,7 +103,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void saveUserDataToFirestore(String firstName, String lastName, String dob, String phoneNumber, String email, String driverLicenseId) {
-        //Log.d("RegisterActivity", "Attempting to save user data to Firestore");
         String userId = mAuth.getCurrentUser().getUid();
         Map<String, Object> user = new HashMap<>();
         user.put("firstName", firstName);
@@ -114,6 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
         user.put("driverLicenseId", driverLicenseId);  // Optional field
         user.put("points", 0);  // Default value for points
         user.put("createdAt", FieldValue.serverTimestamp());
+        user.put("role", "customer");
 
         db.collection("Users").document(userId).set(user)
                 .addOnSuccessListener(aVoid -> {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Car {
+    private String id;
     private String model;
     private String brand;
     private int seats;
@@ -33,6 +34,15 @@ public class Car {
     }
 
     // Getters and Setters for each field
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String carId) {
+        this.id = carId;
+    }
+
     public String getModel() {
         return model;
     }
