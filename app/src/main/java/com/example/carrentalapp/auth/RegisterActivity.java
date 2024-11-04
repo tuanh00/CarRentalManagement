@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.carrentalapp.main.CarRentalApp;
 import com.example.carrentalapp.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
@@ -110,8 +112,10 @@ public class RegisterActivity extends AppCompatActivity {
         user.put("phoneNumber", phoneNumber);
         user.put("driverLicenseId", driverLicenseId);  // Optional field
         user.put("points", 0);  // Default value for points
+        user.put("createdAt", FieldValue.serverTimestamp());
+        user.put("role", "customer");
 
-        db.collection("User").document(userId).set(user)
+        db.collection("Users").document(userId).set(user)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(RegisterActivity.this, CarRentalApp.class));
