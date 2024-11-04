@@ -57,7 +57,7 @@ dependencies {
 
     // Add Google Calendar API dependencies
 // Google Play Services Auth
-   // implementation("com.google.android.gms:play-services-auth:16.0.1")
+    // implementation("com.google.android.gms:play-services-auth:16.0.1")
     //implementation("com.google.android.gms:play-services-auth:20.4.1")
     implementation("com.google.android.gms:play-services-auth:20.5.0")
 
@@ -78,5 +78,9 @@ dependencies {
         exclude(group = "org.apache.httpcomponents", module = "httpcore")
     }
 
+    //Stripe API
+    implementation("com.stripe:stripe-android:20.14.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3") // Optional, for logging
 
 }

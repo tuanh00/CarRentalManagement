@@ -138,16 +138,22 @@ public class AddCarFragment extends Fragment {
 
         db.collection("Cars").add(carData).addOnSuccessListener(documentReference -> {
             String carId = documentReference.getId();  // Capture the auto-generated ID
-            Toast.makeText(getContext(), "Car added successfully", Toast.LENGTH_SHORT).show();
+            documentReference.update("carId", carId)  // Update the document with carId field
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(getContext(), "Car added successfully", Toast.LENGTH_SHORT).show();
 
-            // Clear all fields
-            inputCarModel.setText("");
-            inputCarBrand.setText("");
-            inputCarSeats.setText("");
-            inputCarLocation.setText("");
-            inputCarPrice.setText("");
-            imageUris.clear(); // Clear image list
-            imagePreviewAdapter.notifyDataSetChanged(); // Update the RecyclerView to reflect cleared images
+                        // Clear all fields
+                        inputCarModel.setText("");
+                        inputCarBrand.setText("");
+                        inputCarSeats.setText("");
+                        inputCarLocation.setText("");
+                        inputCarPrice.setText("");
+                        imageUris.clear(); // Clear image list
+                        imagePreviewAdapter.notifyDataSetChanged(); // Update the RecyclerView to reflect cleared images
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getContext(), "Failed to add car ID to document", Toast.LENGTH_SHORT).show();
+                    });
 
         }).addOnFailureListener(e -> {
             Toast.makeText(getContext(), "Failed to add car", Toast.LENGTH_SHORT).show();

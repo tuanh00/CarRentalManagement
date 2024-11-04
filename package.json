@@ -1,0 +1,23 @@
+{
+  "name": "carrentalapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tuanh00/CarRentalManagement.git"
+  },
+  "author": "Tu Anh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tuanh00/CarRentalManagement/issues"
+  },
+  "homepage": "https://github.com/tuanh00/CarRentalManagement#readme",
+  "dependencies": {
+    "express": "^4.21.1",
+    "stripe": "^17.3.1"
+  }
+}
