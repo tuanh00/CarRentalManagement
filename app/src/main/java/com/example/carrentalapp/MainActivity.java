@@ -6,7 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.carrentalapp.auth.LoginActivity;
+import com.example.carrentalapp.utilities.LoginActivity;
 import com.example.carrentalapp.main.CarRentalApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

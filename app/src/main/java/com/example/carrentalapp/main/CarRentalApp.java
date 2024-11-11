@@ -3,16 +3,18 @@ package com.example.carrentalapp.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.carrentalapp.R;
-import com.example.carrentalapp.auth.LoginActivity;
-import com.example.carrentalapp.common.AddCarFragment;
-import com.example.carrentalapp.common.Car;
+import com.example.carrentalapp.utilities.LoginActivity;
+import com.example.carrentalapp.utilities.UpdateContractStatusWorker;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.concurrent.TimeUnit;
 
 public class CarRentalApp extends AppCompatActivity {
 
@@ -33,6 +35,12 @@ public class CarRentalApp extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        PeriodicWorkRequest contractStatusUpdateRequest =
+                new PeriodicWorkRequest.Builder(UpdateContractStatusWorker.class, 12, TimeUnit.HOURS)
+                        .build();
+
+        WorkManager.getInstance(getApplicationContext()).enqueue(contractStatusUpdateRequest);
 
 
     }

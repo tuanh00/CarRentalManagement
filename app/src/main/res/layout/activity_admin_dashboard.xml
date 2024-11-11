@@ -1,54 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     android:background="@color/backgroundColor">
 
-    <!-- Toolbar -->
+    <!-- App Name Header -->
+    <TextView
+        android:id="@+id/appNameHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CarRentalApp"
+        android:textColor="@color/primaryColor"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="16dp"
+        android:background="@color/white" />
+
+    <!-- Toolbar with Greeting TextView and Sign Out Button -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/adminToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        android:title="Admin Dashboard" />
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
-    <!-- Navigation Buttons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="16dp">
-
-        <Button
-            android:id="@+id/buttonAddCar"
+        <!-- Placeholder TextView for Greeting the User -->
+        <TextView
+            android:id="@+id/adminGreetingTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Car"
-            android:backgroundTint="@color/primaryColor"
-            android:textColor="@color/white" />
+            android:text="Hello, [Admin]"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:layout_gravity="start"
+            android:paddingStart="8dp"
+            android:layout_weight="1" />
 
         <Button
-            android:id="@+id/buttonViewCars"
+            android:id="@+id/buttonViewContracts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="View Cars"
-            android:backgroundTint="@color/primaryColor"
-            android:textColor="@color/white"
-            android:layout_marginStart="8dp" />
+            android:text="View All Contracts"
+            android:layout_marginTop="16dp" />
 
+
+        <!-- Sign Out Button -->
         <Button
             android:id="@+id/btnSignOut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign Out"
             android:backgroundTint="@color/secondaryColor"
+            android:textColor="@color/textColor"
+            android:layout_gravity="end" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black" />
+
+    <!-- Navigation Buttons Wrapper -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="?attr/colorPrimary">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonAddCar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Add Car"
+            app:backgroundTint="@color/primaryColor"
             android:textColor="@color/white"
-            android:layout_marginStart="8dp" />
+            app:cornerRadius="0dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonViewCars"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="View Cars"
+            app:backgroundTint="@color/primaryColor"
+            android:textColor="@color/white"
+            app:cornerRadius="0dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonViewUsers"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="View Users"
+            app:backgroundTint="@color/primaryColor"
+            android:textColor="@color/white"
+            app:cornerRadius="0dp" />
     </LinearLayout>
 
     <!-- Fragment Container -->
@@ -57,7 +108,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="16dp"
         android:background="#F1F1F1" />
 
 </LinearLayout>

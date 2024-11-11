@@ -1,6 +1,20 @@
+import java.util.Properties
+import java.io.FileInputStream
+import java.io.FileNotFoundException
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
+}
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { stream ->
+        localProperties.load(stream)
+    }
+} else {
+    throw FileNotFoundException("local.properties file not found. Please create one and add your API keys.")
 }
 
 android {
@@ -15,6 +29,17 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Add the API keys to BuildConfig
+        buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${localProperties["GOOGLE_MAPS_API_KEY"]}\"")
+        buildConfigField("String", "STRIPE_PUBLISHABLE_KEY", "\"${localProperties["STRIPE_PUBLISHABLE_KEY"]}\"")
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"${localProperties["GOOGLE_WEB_CLIENT_ID"]}\"")
+
+    }
+
+    // Add the buildFeatures block here
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -24,6 +49,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            manifestPlaceholders["GOOGLE_MAPS_API_KEY"] = localProperties["GOOGLE_MAPS_API_KEY"] as String
+            manifestPlaceholders["STRIPE_PUBLISHABLE_KEY"] = localProperties["STRIPE_PUBLISHABLE_KEY"] as String
+        }
+        debug {
+            manifestPlaceholders["GOOGLE_MAPS_API_KEY"] = localProperties["GOOGLE_MAPS_API_KEY"] as String
+            manifestPlaceholders["STRIPE_PUBLISHABLE_KEY"] = localProperties["STRIPE_PUBLISHABLE_KEY"] as String
         }
     }
     compileOptions {
@@ -41,6 +72,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage)
+    implementation(libs.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -83,4 +115,13 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3") // Optional, for logging
 
+    //Google Map API
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+
+    // Google Places API
+    implementation("com.google.android.libraries.places:places:3.2.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1") // Latest version as of now
+
+    //Add WorkManager Dependency:
+    implementation("androidx.work:work-runtime:2.7.1")
 }

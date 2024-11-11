@@ -1,7 +1,9 @@
+require('dotenv').config(); // Load environment variables from .env file
+
 const express = require('express');
 const Stripe = require('stripe');
 const app = express();
-const stripe = Stripe('sk_test_51QHBq6P4a6KosqaCDLDFkthYaKBjf8YEF2JC81wdvmh5ULge8IrQ0JIx8iSI0F9wXsJfu9WQuw8dGlQj1voZXNfP00qjzgx6qU'); // Replace with your actual Stripe secret key
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY); // Replace with your actual Stripe secret key
 
 app.use(express.json());
 
@@ -32,7 +34,7 @@ app.post('/payment-sheet', async (req, res) => {
             paymentIntent: paymentIntent.client_secret,
             ephemeralKey: ephemeralKey.secret,
             customer: customer.id,
-            publishableKey: 'pk_test_51QHBq6P4a6KosqaCOMYsupXhwkMPwCCi4TaarRmz0eOyaxs1m4LT6S5Ut65dULxW4hQ8P9TxjxQeeAcnzdhjY2c200jwAdztBR', // Replace with your actual publishable key
+            publishableKey: process.env.STRIPE_PUBLISHABLE_KEY, // Replace with your actual publishable key
         });
     } catch (error) {
         res.status(500).json({ error: error.message });

@@ -10,4 +10,5 @@
     <color name="secondaryDarkColor">#C43E00</color> <!-- Dark orange -->
     <color name="textColor">#FFFFFF</color> <!-- White for text on buttons -->
     <color name="backgroundColor">#F5F5F5</color> <!-- Light gray for backgrounds -->
+    <color name="holo_red_dark">#CC0000</color> <!-- Red dark for remove button -->
 </resources>

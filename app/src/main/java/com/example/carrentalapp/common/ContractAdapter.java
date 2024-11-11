@@ -1,91 +1,189 @@
 package com.example.carrentalapp.common;
 
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.carrentalapp.R;
-import com.example.carrentalapp.admin.EditCarFragment;
+import com.example.carrentalapp.models.Contract;
+import com.example.carrentalapp.uiactivities.admin.EditContractFragment;
+import com.example.carrentalapp.uiactivities.customer.ViewContractDetailsFragment;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ContractAdapter extends RecyclerView.Adapter<ContractAdapter.ContractViewHolder> {
 
-    private List<Car> carList;
+    private List<Contract> contractList;
     private Context context;
-    private boolean isAdminUser;
+    private FirebaseFirestore db;
+    private static final String PREFS_NAME = "CarRentalAppPrefs";
+    private static final String ROLE_KEY = "user_role";
+    private String role;
 
-    public ContractAdapter(Context context, List<Car> carList, boolean isAdminUser) {
+    public ContractAdapter(Context context, List<Contract> contractList) {
         this.context = context;
-        this.carList = carList;
-        this.isAdminUser = isAdminUser;
+        this.contractList = contractList;
+        this.db = FirebaseFirestore.getInstance();
+
+        // Retrieve role from SharedPreferences
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        this.role = sharedPreferences.getString(ROLE_KEY, "customer");
     }
 
     @NonNull
     @Override
     public ContractViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_car, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_contract, parent, false);
         return new ContractViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ContractViewHolder holder, int position) {
-        Car car = carList.get(position);
-        holder.carBrandModel.setText(car.getBrand() + " " + car.getModel());
-        holder.carPrice.setText("$" + car.getPrice());
-        holder.carSeats.setText(car.getSeats() + " seats");
-        holder.carRating.setRating(car.getRating());
+        Contract contract = contractList.get(position);
 
-        Glide.with(context)
-                .load(car.getImageUrls().get(0))
-                .placeholder(R.drawable.car_placeholder)
-                .into(holder.carImage);
+        holder.userIdTextView.setText("User ID: " + contract.getUserId());
+        holder.carIdTextView.setText("Car ID: " + contract.getCarId());
+        holder.startDateTextView.setText("Start: " + formatTimestamp(contract.getStartDate()));
+        holder.endDateTextView.setText("End: " + formatTimestamp(contract.getEndDate()));
+        holder.totalPaymentTextView.setText("Total: $" + contract.getTotalPayment());
+        holder.statusTextView.setText("Status: " + contract.getState());
 
-        holder.actionButton.setText(isAdminUser ? "Edit" : "Rent");
-        holder.actionButton.setOnClickListener(v -> {
-            if (isAdminUser) {
-                Intent intent = new Intent(context, EditCarFragment.class);
-                intent.putExtra("carId", car.getId());
-                context.startActivity(intent);
-            } else {
-                Intent intent = new Intent(context, RentCarFragment.class);
-                intent.putExtra("carId", car.getId());
-                intent.putExtra("carName", car.getBrand() + " " + car.getModel());
-                intent.putExtra("pricePerDay", car.getPrice());
-                context.startActivity(intent);
-            }
-        });
+        if ("admin".equals(role)) {
+            // Only show the Edit button for admins
+            holder.viewDetailsButton.setVisibility(View.GONE);
+            holder.editContractButton.setVisibility(View.VISIBLE);
+
+            // Edit Contract Button Action (Only for Admins)
+            holder.editContractButton.setOnClickListener(v -> {
+                FragmentActivity fragmentActivity = (FragmentActivity) context;
+                EditContractFragment editFragment = new EditContractFragment();
+
+                // Pass the contract data through the bundle
+                editFragment.setArguments(createContractBundle(contract));
+                fragmentActivity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.adminFragmentContainer, editFragment)
+                        .addToBackStack(null)
+                        .commit();
+            });
+        } else {
+            // Only show the View Details button for customers
+            holder.viewDetailsButton.setVisibility(View.VISIBLE);
+            holder.editContractButton.setVisibility(View.GONE);
+
+            // Button to view details
+            holder.viewDetailsButton.setOnClickListener(v -> {
+                FragmentActivity fragmentActivity = (FragmentActivity) context;
+                ViewContractDetailsFragment detailsFragment = new ViewContractDetailsFragment();
+                detailsFragment.setArguments(createContractBundle(contract));
+                fragmentActivity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.customerFragmentContainer, detailsFragment)
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
-        return carList.size();
+        return contractList.size();
+    }
+
+    private Bundle createContractBundle(Contract contract) {
+        Bundle bundle = new Bundle();
+        // Assuming `eventId` is a field in `Contract`
+        bundle.putString("eventId", contract.getEventId());
+        bundle.putString("userId", contract.getUserId());
+        bundle.putString("carId", contract.getCarId());
+        bundle.putString("startDate", contract.getStartDate().toString());
+        bundle.putString("endDate", contract.getEndDate().toString());
+        bundle.putDouble("totalPayment", contract.getTotalPayment());
+        bundle.putString("status", contract.getState().toString());
+        return bundle;
+    }
+
+    /**
+     * Formats Firebase Timestamp to a readable date string.
+     *
+     * @param timestamp The Firebase Timestamp.
+     * @return Formatted date string.
+     */
+    private String formatTimestamp(Timestamp timestamp) {
+        if (timestamp == null) return "N/A";
+        Date date = timestamp.toDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+        return sdf.format(date);
     }
 
     public static class ContractViewHolder extends RecyclerView.ViewHolder {
-        TextView carBrandModel, carPrice, carSeats;
-        ImageView carImage;
-        RatingBar carRating;
-        Button actionButton;
+        TextView userIdTextView, carIdTextView, startDateTextView, endDateTextView, totalPaymentTextView, statusTextView;
+        Button viewDetailsButton, editContractButton;
 
         public ContractViewHolder(@NonNull View itemView) {
             super(itemView);
-            carBrandModel = itemView.findViewById(R.id.carBrandModel);
-            carPrice = itemView.findViewById(R.id.carPrice);
-            carSeats = itemView.findViewById(R.id.carSeats);
-            carImage = itemView.findViewById(R.id.carImage);
-            carRating = itemView.findViewById(R.id.carRating);
-            actionButton = itemView.findViewById(R.id.actionButton);
+            userIdTextView = itemView.findViewById(R.id.textViewUserId);
+            carIdTextView = itemView.findViewById(R.id.textViewCarId);
+            startDateTextView = itemView.findViewById(R.id.textViewStartDate);
+            endDateTextView = itemView.findViewById(R.id.textViewEndDate);
+            totalPaymentTextView = itemView.findViewById(R.id.textViewTotalPayment);
+            statusTextView = itemView.findViewById(R.id.textViewStatus);
+            viewDetailsButton = itemView.findViewById(R.id.buttonViewDetails);
+            editContractButton = itemView.findViewById(R.id.buttonEditContract);
+        }
+    }
+
+    public void loadContractsBasedOnRole(String role, String userId) {
+        if ("admin".equals(role)) {
+            // Fetch all contracts for admin
+            db.collection("Contracts")
+                    .orderBy("createdAt", Query.Direction.DESCENDING)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            contractList.clear();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Contract contract = document.toObject(Contract.class);
+                                contractList.add(contract);
+                            }
+                            notifyDataSetChanged();
+                        } else {
+                            Log.e("ContractAdapter", "Error retrieving contracts", task.getException());
+                        }
+                    });
+        } else if ("customer".equals(role) && userId != null) {
+            // Fetch only the customer's contracts
+            db.collection("Contracts")
+                    .whereEqualTo("userId", userId)
+                    .orderBy("createdAt", Query.Direction.DESCENDING)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            contractList.clear();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Contract contract = document.toObject(Contract.class);
+                                contractList.add(contract);
+                            }
+                            notifyDataSetChanged();
+                        } else {
+                            Log.e("ContractAdapter", "Error retrieving user contracts", task.getException());
+                        }
+                    });
         }
     }
 }

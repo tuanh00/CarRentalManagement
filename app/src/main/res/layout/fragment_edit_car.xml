@@ -1,76 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollViewEditCar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Brand Input -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Brand"
-        android:textSize="16sp" />
-
-    <EditText
-        android:id="@+id/brandEditText"
+    <LinearLayout
+        android:id="@+id/linearLayoutEditCar"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter car brand"
-        android:inputType="text" />
+        android:layout_height="wrap_content">
 
-    <!-- Model Input -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Model"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp" />
+        <!-- Car Image -->
+        <ImageView
+            android:id="@+id/carImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/car_placeholder"
+            android:contentDescription="Car Image" />
 
-    <EditText
-        android:id="@+id/modelEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter car model"
-        android:inputType="text" />
+        <!-- Brand Input -->
+        <TextView
+            android:id="@+id/textViewBrandLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Brand"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
 
-    <!-- Seats Input -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Seats"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp" />
+        <EditText
+            android:id="@+id/brandEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter car brand"
+            android:inputType="text"
+            android:background="@color/cardview_shadow_end_color"
+            android:padding="12dp" />
 
-    <EditText
-        android:id="@+id/seatsEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter number of seats"
-        android:inputType="number" />
+        <!-- Model Input -->
+        <TextView
+            android:id="@+id/textViewModelLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Model"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
 
-    <!-- Price Input -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Price"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp" />
+        <EditText
+            android:id="@+id/modelEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter car model"
+            android:inputType="text"
+            android:background="@color/cardview_shadow_end_color"
+            android:padding="12dp" />
 
-    <EditText
-        android:id="@+id/priceEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter price per day"
-        android:inputType="numberDecimal" />
+        <!-- Seats Input -->
+        <TextView
+            android:id="@+id/textViewSeatsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seats"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
 
-    <!-- Save Button -->
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/primaryColor"
-        android:textColor="@android:color/white" />
-</LinearLayout>
+        <EditText
+            android:id="@+id/seatsEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter number of seats"
+            android:inputType="number"
+            android:background="@color/cardview_shadow_end_color"
+            android:padding="12dp" />
+
+        <!-- Price Input -->
+        <TextView
+            android:id="@+id/textViewPriceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/priceEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter price per day"
+            android:inputType="numberDecimal"
+            android:background="@color/cardview_shadow_end_color"
+            android:padding="12dp" />
+
+        <!-- Location Input -->
+        <TextView
+            android:id="@+id/textViewLocationLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/locationEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter location to pickup"
+            android:inputType="text"
+            android:background="@color/cardview_shadow_end_color"
+            android:padding="12dp" />
+
+        <!-- Availability Toggle and Edit Images Button -->
+        <LinearLayout
+            android:id="@+id/linearLayoutActions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/availabilitySwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Available"
+                android:textSize="16sp"
+                android:checked="true"
+                android:layout_gravity="center_vertical" />
+
+            <Button
+                android:id="@+id/buttonEditImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit Images"
+                android:layout_marginStart="16dp"
+                android:layout_gravity="center_vertical"
+                android:backgroundTint="@color/primaryColor"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <!-- RecyclerView for Image Previews -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/imageRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="16dp"
+            android:scrollbars="horizontal" />
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/primaryColor"
+            android:layout_marginTop="24dp" />
+
+    </LinearLayout>
+
+</ScrollView>

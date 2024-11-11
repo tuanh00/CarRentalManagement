@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -21,26 +23,36 @@
         android:networkSecurityConfig="@xml/network_security_config"
         >
         <!-- Add your Stripe publishable key here -->
+<!--        <meta-data-->
+<!--            android:name="com.stripe.android.API_KEY"-->
+<!--            android:value="pk_test_51QHBq6P4a6KosqaCOMYsupXhwkMPwCCi4TaarRmz0eOyaxs1m4LT6S5Ut65dULxW4hQ8P9TxjxQeeAcnzdhjY2c200jwAdztBR" />-->
         <meta-data
             android:name="com.stripe.android.API_KEY"
-            android:value="pk_test_51QHBq6P4a6KosqaCOMYsupXhwkMPwCCi4TaarRmz0eOyaxs1m4LT6S5Ut65dULxW4hQ8P9TxjxQeeAcnzdhjY2c200jwAdztBR" />
+            android:value="${STRIPE_PUBLISHABLE_KEY}" />
+        <!-- Add your Android API key auto created by Firebase here -->
+<!--        <meta-data-->
+<!--            android:name="com.google.android.geo.API_KEY"-->
+<!--            android:value="AIzaSyCwQ6Ybku5uvSn11wRm2xJorRY2wec_jaA" />-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${GOOGLE_MAPS_API_KEY}" />
         <activity
-            android:name=".customer.CustomerDashboardActivity"
+            android:name=".uiactivities.customer.CustomerDashboardActivity"
             android:exported="false" />
         <activity
-            android:name=".admin.AdminDashboardActivity"
+            android:name=".uiactivities.admin.AdminDashboardActivity"
             android:exported="false" />
         <activity
-            android:name=".auth.RegisterActivity"
+            android:name=".utilities.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".auth.LoginActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".main.CarRentalApp"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".utilities.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

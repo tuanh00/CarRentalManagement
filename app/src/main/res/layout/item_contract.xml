@@ -1,33 +1,67 @@
-<!-- res/layout/item_contract.xml -->
+<!-- item_contract.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="12dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp">
+   >
 
     <TextView
-        android:id="@+id/carNameTextView"
+        android:id="@+id/textViewUserId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Car Name"
+        android:text="User ID: "
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/rentalPeriodTextView"
+        android:id="@+id/textViewCarId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rental Period" />
+        android:text="Car ID: " />
 
     <TextView
-        android:id="@+id/totalPaymentTextView"
+        android:id="@+id/textViewStartDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Total Payment" />
+        android:text="Start: " />
 
     <TextView
-        android:id="@+id/statusTextView"
+        android:id="@+id/textViewEndDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Status" />
+        android:text="End: " />
+
+    <TextView
+        android:id="@+id/textViewTotalPayment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total: $" />
+
+    <TextView
+        android:id="@+id/textViewStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status: " />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/buttonViewDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Details" />
+
+        <Button
+            android:id="@+id/buttonEditContract"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit"
+            android:layout_marginStart="8dp"
+            android:visibility="gone" />
+    </LinearLayout>
 
 </LinearLayout>

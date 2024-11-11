@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+
     android:background="@color/backgroundColor">
 
     <!-- Toolbar or Top Navigation Bar -->
@@ -27,31 +27,31 @@
         android:textColorHint="@color/black"/>
 
     <!-- Date Time Inputs -->
-    <EditText
-        android:id="@+id/fromDateTimePicker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Select desired starting date"
-        android:inputType="none"
-        android:focusable="false"
-        android:clickable="true"
-        android:padding="12dp"
-        android:background="@color/white"
-        android:layout_marginBottom="8dp"
-        android:textColorHint="@color/black"/>
+<!--    <EditText-->
+<!--        android:id="@+id/fromDateTimePicker"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="Select desired starting date"-->
+<!--        android:inputType="none"-->
+<!--        android:focusable="false"-->
+<!--        android:clickable="true"-->
+<!--        android:padding="12dp"-->
+<!--        android:background="@color/white"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:textColorHint="@color/black"/>-->
 
-    <EditText
-        android:id="@+id/toDateTimePicker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Select desired returning date"
-        android:inputType="none"
-        android:focusable="false"
-        android:clickable="true"
-        android:padding="12dp"
-        android:background="@color/white"
-        android:layout_marginBottom="16dp"
-        android:textColorHint="@color/black"/>
+<!--    <EditText-->
+<!--        android:id="@+id/toDateTimePicker"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="Select desired returning date"-->
+<!--        android:inputType="none"-->
+<!--        android:focusable="false"-->
+<!--        android:clickable="true"-->
+<!--        android:padding="12dp"-->
+<!--        android:background="@color/white"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:textColorHint="@color/black"/>-->
 
     <!-- RecyclerView - expands to fill available space -->
     <androidx.recyclerview.widget.RecyclerView
@@ -83,6 +83,13 @@
             android:text="Search for Car"
             android:backgroundTint="@color/primaryColor"
             android:textColor="@color/textColor"/>
+
+        <Button
+            android:id="@+id/buttonViewContracts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Contracts"
+            android:layout_marginTop="16dp" />
 
         <Button
             android:id="@+id/signOutButton"

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "655767929093",
+    "firebase_url": "https://carrentalmanagment-default-rtdb.firebaseio.com",
     "project_id": "carrentalmanagment",
     "storage_bucket": "carrentalmanagment.appspot.com"
   },
@@ -14,11 +15,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "655767929093-7hb61vhsrfd65q5n9v5rg7dkj5q3g0d3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.carrentalapp",
+            "certificate_hash": "98ef20255bdb1d97431afb945c61824c6751fd73"
+          }
+        },
+        {
           "client_id": "655767929093-d3442mfps8an9a5t5l7fr0lap5tstd9l.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.carrentalapp",
             "certificate_hash": "c6d3ea831931c4a7a9b81d8edfc7e0fc4e0f56c3"
+          }
+        },
+        {
+          "client_id": "655767929093-gnejh5l5alo91h8lem79n7q3lr5ra0pn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.carrentalapp",
+            "certificate_hash": "6d7ab6e2f90d0169c92414381ae11f9b2fa0c84e"
           }
         },
         {
