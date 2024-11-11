@@ -4,19 +4,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/backgroundColor">
+    android:background="@color/backgroundColor"
+    android:gravity="center_horizontal">
 
-    <!-- Toolbar -->
+    <!-- Toolbar with Logo and Title (fills screen horizontally) -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/adminToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        android:title="Admin Dashboard" />
+        android:padding="8dp"
+        android:elevation="4dp">
 
-    <!-- Navigation Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Logo ImageView (Optional Adjustments for Padding/Size) -->
+            <ImageView
+                android:id="@+id/logoImage"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/logocar2"
+                android:contentDescription="Logo"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Title TextView with Styling for Readability -->
+            <TextView
+                android:id="@+id/toolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Admin Dashboard"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- Horizontal Divider for Visual Separation -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Navigation Buttons with Uniform Spacing and Styling -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,38 +61,92 @@
 
         <Button
             android:id="@+id/buttonAddCar"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Add Car"
+            android:background="@drawable/button_background"
             android:backgroundTint="@color/primaryColor"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:layout_margin="4dp" />
 
         <Button
             android:id="@+id/buttonViewCars"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="View Cars"
             android:backgroundTint="@color/primaryColor"
+            android:background="@drawable/button_background"
             android:textColor="@color/white"
-            android:layout_marginStart="8dp" />
+            android:layout_margin="4dp" />
 
         <Button
             android:id="@+id/btnSignOut"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Sign Out"
             android:backgroundTint="@color/secondaryColor"
+            android:background="@drawable/button_background"
             android:textColor="@color/white"
-            android:layout_marginStart="8dp" />
+            android:layout_margin="4dp" />
     </LinearLayout>
 
-    <!-- Fragment Container -->
+    <!-- Document Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@android:color/white"
+        android:layout_marginTop="24dp"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"/>
+
+    <!-- Document Section Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Documents"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Sample Document Items (Replace with RecyclerView if needed) -->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:drawableStart="@drawable/ic_file"
+        android:drawablePadding="8dp"
+        android:paddingVertical="8dp"
+        android:text="Rental Agreement.pdf"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Terms and Conditions.docx"
+        android:textSize="16sp"
+        android:drawableStart="@drawable/ic_file"
+        android:drawablePadding="8dp"
+        android:paddingVertical="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_marginBottom="4dp" />
+
+
+    <!-- Content Area for Fragment/Screen Content -->
     <FrameLayout
         android:id="@+id/adminFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginTop="16dp"
-        android:background="#F1F1F1" />
+        android:background="@android:color/white"
+        android:elevation="2dp" />
 
 </LinearLayout>

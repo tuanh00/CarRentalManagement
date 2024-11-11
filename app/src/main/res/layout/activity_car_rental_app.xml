@@ -1,19 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="0dp"
     android:background="@color/backgroundColor">
 
-    <!-- Toolbar or Top Navigation Bar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/customerToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        android:title="Customer Dashboard" />
+        android:elevation="4dp"
+        android:padding="0dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Logo ImageView -->
+            <ImageView
+                android:id="@+id/logoImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="Logo"
+                android:src="@drawable/logocar2" />
+
+            <!-- Title TextView -->
+            <TextView
+                android:id="@+id/toolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Customer Dashboard"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="8dp"/>
 
     <!-- Search Bar -->
     <EditText
@@ -32,7 +66,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Select desired starting date"
-        android:inputType="none"
         android:focusable="false"
         android:clickable="true"
         android:padding="12dp"
@@ -45,7 +78,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Select desired returning date"
-        android:inputType="none"
         android:focusable="false"
         android:clickable="true"
         android:padding="12dp"
@@ -66,14 +98,15 @@
         android:id="@+id/customerFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" /> <!-- Initially hidden -->
+        android:visibility="gone" />
 
-    <!-- Buttons -->
+    <!-- Buttons Section (Centered) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal">
 
         <Button
             android:id="@+id/searchButton"
