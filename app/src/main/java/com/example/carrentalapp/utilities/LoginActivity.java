@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
     private static final List<String> ADMIN_EMAILS = Arrays.asList(
             "chtuanh265@gmail.com", // Add any additional admin emails here
-            "admin2@gmail.com"
+            "admin2@gmail.com", "duy.roan@gmail.com"
     );
 
     private GoogleSignInClient googleSignInClient;
