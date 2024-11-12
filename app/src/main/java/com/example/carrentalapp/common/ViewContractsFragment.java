@@ -39,7 +39,6 @@ public class ViewContractsFragment extends Fragment {
     public ViewContractsFragment() {
         // Required empty public constructor
     }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -55,10 +54,35 @@ public class ViewContractsFragment extends Fragment {
         contractAdapter = new ContractAdapter(getContext(), contractList);
         recyclerViewContracts.setAdapter(contractAdapter);
 
+        // Initial load when the view is created
         loadContractsBasedOnRole();
 
         return view;
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // Listen for refresh signal from EditContractFragment
+        getParentFragmentManager().setFragmentResultListener("contractUpdated", this, (requestKey, result) -> {
+            // Reload contracts when an update occurs
+            loadContractsBasedOnRole();
+        });
+
+        // Existing setup for RecyclerView and data loading
+        recyclerViewContracts = view.findViewById(R.id.recyclerViewContracts);
+        recyclerViewContracts.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Reload contracts when receiving the "contractUpdated" signal
+        loadContractsBasedOnRole();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Reload contracts when fragment resumes to ensure updated data
+        loadContractsBasedOnRole();
+    }
+
 
     private void loadContractsBasedOnRole() {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);

@@ -11,4 +11,6 @@
     <color name="textColor">#FFFFFF</color> <!-- White for text on buttons -->
     <color name="backgroundColor">#F5F5F5</color> <!-- Light gray for backgrounds -->
     <color name="holo_red_dark">#CC0000</color> <!-- Red dark for remove button -->
+    <color name="button_background">#002171</color>
+
 </resources>

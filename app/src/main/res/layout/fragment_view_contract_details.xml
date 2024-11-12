@@ -11,18 +11,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- User ID -->
+        <!-- User Full Name -->
         <TextView
-            android:id="@+id/textViewUserIdLabel"
+            android:id="@+id/textViewUserFullNameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="User ID:"
+            android:text="User:"
             android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginTop="8dp" />
 
         <TextView
-            android:id="@+id/textViewUserId"
+            android:id="@+id/textViewUserFullName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="N/A"
@@ -74,6 +74,23 @@
 
         <TextView
             android:id="@+id/textViewEndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="N/A"
+            android:textSize="16sp" />
+
+        <!-- Updated At -->
+        <TextView
+            android:id="@+id/textViewCreatedAtLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Updated At:"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/textViewCreatedAt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="N/A"

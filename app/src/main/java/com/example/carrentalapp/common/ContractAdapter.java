@@ -35,7 +35,7 @@ public class ContractAdapter extends RecyclerView.Adapter<ContractAdapter.Contra
     private FirebaseFirestore db;
     private static final String PREFS_NAME = "CarRentalAppPrefs";
     private static final String ROLE_KEY = "user_role";
-    private String role;
+    private String role, firstName, lastName;
 
     public ContractAdapter(Context context, List<Contract> contractList) {
         this.context = context;
@@ -45,6 +45,8 @@ public class ContractAdapter extends RecyclerView.Adapter<ContractAdapter.Contra
         // Retrieve role from SharedPreferences
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         this.role = sharedPreferences.getString(ROLE_KEY, "customer");
+        this.firstName = sharedPreferences.getString("first_name", "N/A");
+        this.lastName = sharedPreferences.getString("last_name", "N/A");
     }
 
     @NonNull
@@ -58,10 +60,11 @@ public class ContractAdapter extends RecyclerView.Adapter<ContractAdapter.Contra
     public void onBindViewHolder(@NonNull ContractViewHolder holder, int position) {
         Contract contract = contractList.get(position);
 
-        holder.userIdTextView.setText("User ID: " + contract.getUserId());
+        holder.userNameTextView.setText("User: " + firstName + " " + lastName);
         holder.carIdTextView.setText("Car ID: " + contract.getCarId());
         holder.startDateTextView.setText("Start: " + formatTimestamp(contract.getStartDate()));
         holder.endDateTextView.setText("End: " + formatTimestamp(contract.getEndDate()));
+        holder.createdAtTextView.setText("Created At: " + formatTimestamp(contract.getCreatedAt()));
         holder.totalPaymentTextView.setText("Total: $" + contract.getTotalPayment());
         holder.statusTextView.setText("Status: " + contract.getState());
 
@@ -77,6 +80,7 @@ public class ContractAdapter extends RecyclerView.Adapter<ContractAdapter.Contra
 
                 // Pass the contract data through the bundle
                 editFragment.setArguments(createContractBundle(contract));
+
                 fragmentActivity.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.adminFragmentContainer, editFragment)
                         .addToBackStack(null)
@@ -109,10 +113,12 @@ public class ContractAdapter extends RecyclerView.Adapter<ContractAdapter.Contra
         Bundle bundle = new Bundle();
         // Assuming `eventId` is a field in `Contract`
         bundle.putString("eventId", contract.getEventId());
-        bundle.putString("userId", contract.getUserId());
+        bundle.putString("userId", contract.getUserId()); //pass but not use yet
+        bundle.putString("fullName", firstName + lastName);
         bundle.putString("carId", contract.getCarId());
-        bundle.putString("startDate", contract.getStartDate().toString());
-        bundle.putString("endDate", contract.getEndDate().toString());
+        bundle.putParcelable("startDate", contract.getStartDate()); // Pass Timestamp directly
+        bundle.putParcelable("endDate", contract.getEndDate()); // Pass Timestamp directly
+        bundle.putParcelable("createdAt", contract.getCreatedAt()); // Pass Timestamp directly
         bundle.putDouble("totalPayment", contract.getTotalPayment());
         bundle.putString("status", contract.getState().toString());
         return bundle;
@@ -132,15 +138,16 @@ public class ContractAdapter extends RecyclerView.Adapter<ContractAdapter.Contra
     }
 
     public static class ContractViewHolder extends RecyclerView.ViewHolder {
-        TextView userIdTextView, carIdTextView, startDateTextView, endDateTextView, totalPaymentTextView, statusTextView;
+        TextView userNameTextView, carIdTextView, startDateTextView, endDateTextView, totalPaymentTextView, statusTextView, createdAtTextView;
         Button viewDetailsButton, editContractButton;
 
         public ContractViewHolder(@NonNull View itemView) {
             super(itemView);
-            userIdTextView = itemView.findViewById(R.id.textViewUserId);
+            userNameTextView = itemView.findViewById(R.id.textViewUserName);
             carIdTextView = itemView.findViewById(R.id.textViewCarId);
             startDateTextView = itemView.findViewById(R.id.textViewStartDate);
             endDateTextView = itemView.findViewById(R.id.textViewEndDate);
+            createdAtTextView = itemView.findViewById(R.id.textViewCreatedAt);
             totalPaymentTextView = itemView.findViewById(R.id.textViewTotalPayment);
             statusTextView = itemView.findViewById(R.id.textViewStatus);
             viewDetailsButton = itemView.findViewById(R.id.buttonViewDetails);

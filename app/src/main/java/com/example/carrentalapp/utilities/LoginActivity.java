@@ -27,6 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.Task;
 import com.google.api.services.calendar.CalendarScopes;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -112,7 +113,6 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 GoogleSignInAccount account = task.getResult();
                 if (account != null) {
-                    initializeGoogleCalendarCredential(account.getEmail());
                     firebaseAuthWithGoogle(account);
                 }
             } catch (Exception e) {
@@ -121,12 +121,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void initializeGoogleCalendarCredential(String accountName) {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(GOOGLE_ACCOUNT_NAME_KEY, accountName);
-        editor.apply();
-    }
+//    private void initializeGoogleCalendarCredential(String accountName) {
+//        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putString(GOOGLE_ACCOUNT_NAME_KEY, accountName);
+//        editor.apply();
+//    }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -134,8 +134,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
-                        checkAndSaveGoogleUser(user); // Add this method
-                        navigateUser(user, "google.com");
+                        checkAndSaveGoogleUser(user);
                     } else {
                         Toast.makeText(this, "Firebase Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -146,37 +145,73 @@ public class LoginActivity extends AppCompatActivity {
             db.collection("Users").document(user.getUid()).get()
                     .addOnSuccessListener(document -> {
                         if (!document.exists()) {
-                            // If user doesn't exist in the Users collection, save their data
+                            // Determine role based on email
+                            String role = ADMIN_EMAILS.contains(user.getEmail()) ? "admin" : "customer";
+
+                            // Prepare user data with additional fields
                             Map<String, Object> userData = new HashMap<>();
                             userData.put("userId", user.getUid());
                             userData.put("email", user.getEmail());
-                            userData.put("role", "customer"); // Default role for Google users
+                            userData.put("role", role);
+                            userData.put("createdAt", Timestamp.now());
 
+                            String firstName = user.getDisplayName() != null ? user.getDisplayName().split(" ")[0] : "";
+                            String lastName = user.getDisplayName() != null ? user.getDisplayName().split(" ")[1] : "";
+                            userData.put("firstName", firstName);
+                            userData.put("lastName", lastName);
+
+                            // Save user data to Firestore and navigate
                             db.collection("Users").document(user.getUid()).set(userData)
-                                    .addOnSuccessListener(aVoid -> Log.d("LoginActivity", "Google user added to Users collection"))
+                                    .addOnSuccessListener(aVoid -> {
+                                        // Save user details to preferences
+                                        saveUserDetailsToPreferences(user.getUid(), user.getEmail(), role, firstName, lastName);
+                                        // Navigate after saving
+                                        navigateToDashboard(role);
+                                    })
                                     .addOnFailureListener(e -> Log.e("LoginActivity", "Error adding Google user", e));
+                        } else {
+                            // User already exists in Firestore, retrieve data to save in preferences
+                            String role = document.getString("role");
+                            String firstName = document.getString("firstName");
+                            String lastName = document.getString("lastName");
+                            saveUserDetailsToPreferences(user.getUid(), user.getEmail(), role, firstName, lastName);
+                            // Navigate after retrieving role
+                            navigateToDashboard(role);
                         }
                     });
         }
     }
+    private void saveUserDetailsToPreferences(String userId, String email, String role, String firstName, String lastName) {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("user_id", userId);
+        editor.putString("email", email);
+        editor.putString(ROLE_KEY, role);
+        editor.putString("first_name", firstName);
+        editor.putString("last_name", lastName);
+        editor.putString(GOOGLE_ACCOUNT_NAME_KEY, email); // Save the Google account name
+        editor.apply();
+    }
+
+
     private void navigateUser(FirebaseUser firebaseUser, String provider) {
         if (firebaseUser != null) {
-            String email = firebaseUser.getEmail();
-            SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
             if ("google.com".equals(provider)) {
-                if (ADMIN_EMAILS.contains(email)) {
-                    saveUserRole("admin");
-                    navigateToAdminDashboard();
-                } else {
-                    saveUserRole("customer");
-                    navigateToCustomerDashboard();
-                }
+                checkAndSaveGoogleUser(firebaseUser);
             } else {
                 checkRoleInFirestore(firebaseUser.getUid());
             }
         }
     }
+
+    private void navigateToDashboard(String role) {
+        if ("admin".equals(role)) {
+            navigateToAdminDashboard();
+        } else {
+            navigateToCustomerDashboard();
+        }
+    }
+
 
     private void checkRoleInFirestore(String userId) {
         db.collection("Users").document(userId).get()
@@ -197,13 +232,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    // Save the user role in shared preferences after login
-    private void saveUserRole(String role) {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(ROLE_KEY, role);
-        editor.apply();
-    }
+
 
     private void navigateToAdminDashboard() {
         Intent intent = new Intent(this, AdminDashboardActivity.class);

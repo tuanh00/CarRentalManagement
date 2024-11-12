@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.carrentalapp.R;
+import com.example.carrentalapp.common.ViewContractsFragment;
 import com.example.carrentalapp.states.contract.ContractState;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
@@ -32,7 +33,7 @@ import java.util.Map;
 
 public class EditContractFragment extends Fragment {
 
-    private TextView eventIdTextView, userIdTextView, carIdTextView, startDateTextView, endDateTextView, totalPaymentTextView, statusTextView;
+    private TextView eventIdTextView, userFulleNameTextView, carIdTextView, startDateTextView, endDateTextView, totalPaymentTextView, statusTextView, createdAtTextView, updatedAtTextView, toggleStatusLabel;
     private SwitchCompat statusSwitch;
     private Button buttonUpdateStatus;
     private FirebaseFirestore db;
@@ -55,13 +56,16 @@ public class EditContractFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Initialize UI components
-        eventIdTextView = view.findViewById(R.id.textViewContractId); // Renamed in XML if needed
-        userIdTextView = view.findViewById(R.id.textViewUserId);
+        eventIdTextView = view.findViewById(R.id.textViewContractId);
+        userFulleNameTextView = view.findViewById(R.id.textViewUserFullName);
         carIdTextView = view.findViewById(R.id.textViewCarId);
         startDateTextView = view.findViewById(R.id.textViewStartDate);
         endDateTextView = view.findViewById(R.id.textViewEndDate);
         totalPaymentTextView = view.findViewById(R.id.textViewTotalPayment);
         statusTextView = view.findViewById(R.id.textViewCurrentStatus);
+        createdAtTextView = view.findViewById(R.id.textViewCreatedAt);
+        updatedAtTextView = view.findViewById(R.id.textViewUpdatedAt);
+        toggleStatusLabel = view.findViewById(R.id.textViewToggleStatus);
         statusSwitch = view.findViewById(R.id.statusSwitch);
         buttonUpdateStatus = view.findViewById(R.id.buttonUpdateStatus);
 
@@ -69,27 +73,42 @@ public class EditContractFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             eventId = bundle.getString("eventId", "N/A");
-            String userId = bundle.getString("userId", "N/A");
+            String userFullName = bundle.getString("fullName", "N/A");
             String carId = bundle.getString("carId", "N/A");
             Timestamp startDate = bundle.getParcelable("startDate");
             Timestamp endDate = bundle.getParcelable("endDate");
+            Timestamp createdAt = bundle.getParcelable("createdAt");
+            Timestamp updatedAt = bundle.getParcelable("updatedAt");
             double totalPayment = bundle.getDouble("totalPayment", 0.0);
-            String status = bundle.getString("status", "ACTIVE");
+            String status = bundle.getString("status", "N/A");
 
+            // Set UI with values
             eventIdTextView.setText(eventId);
-            userIdTextView.setText(userId);
+            userFulleNameTextView.setText(userFullName);
             carIdTextView.setText(carId);
             startDateTextView.setText(formatTimestamp(startDate));
             endDateTextView.setText(formatTimestamp(endDate));
-            totalPaymentTextView.setText("$" + totalPayment);
+            createdAtTextView.setText(formatTimestamp(createdAt));
+            updatedAtTextView.setText(formatTimestamp(updatedAt));
+            totalPaymentTextView.setText("Total Payment: $" + totalPayment);
             statusTextView.setText(status);
 
-            statusSwitch.setChecked("COMPLETED".equalsIgnoreCase(status));
+
+            // Set status toggle label and switch text based on current status
+            if (ContractState.ACTIVE.toString().equalsIgnoreCase(status)) {
+                toggleStatusLabel.setText("Set Status to Completed:");
+                statusSwitch.setText("Completed");
+                statusSwitch.setChecked(false);
+            } else if (ContractState.COMPLETED.toString().equalsIgnoreCase(status)) {
+                toggleStatusLabel.setText("Set Status to Canceled:");
+                statusSwitch.setText("Canceled");
+                statusSwitch.setChecked(true);
+            }
+
+            buttonUpdateStatus.setOnClickListener(v -> updateContractStatus());
         } else {
             Toast.makeText(getContext(), "Failed to load contract details", Toast.LENGTH_SHORT).show();
         }
-
-        buttonUpdateStatus.setOnClickListener(v -> updateContractStatus());
     }
     private String formatTimestamp(Timestamp timestamp) {
         if (timestamp == null) return "N/A";
@@ -129,8 +148,8 @@ public class EditContractFragment extends Fragment {
                                     // Set a result to notify ViewContractsFragment of the update
                                     getParentFragmentManager().setFragmentResult("contractUpdated", new Bundle());
 
-                                    // Navigate back to the AdminDashboardActivity or ViewContractsFragment
-                                    navigateToAdminDashboard();
+                                    // Navigate back to the navigateToViewContractFragment
+                                    navigateToViewContractFragment();
                                 })
                                 .addOnFailureListener(e -> {
                                     Toast.makeText(getContext(), "Failed to update contract: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -145,14 +164,16 @@ public class EditContractFragment extends Fragment {
     }
 
     /**
-     * Navigate back to AdminDashboardActivity after updating the contract.
+     * Navigate back to navigateToViewContractFragment after updating the contract.
      */
-    private void navigateToAdminDashboard() {
-        Intent intent = new Intent(getContext(), AdminDashboardActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        if (getActivity() != null) {
-            getActivity().finish();
-        }
+    private void navigateToViewContractFragment() {
+        Fragment viewContractsFragment = new ViewContractsFragment();
+
+        // Replace the current fragment with ViewContractsFragment
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.adminFragmentContainer, viewContractsFragment)
+                .addToBackStack(null)
+                .commit();
     }
+
 }

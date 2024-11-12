@@ -16,7 +16,7 @@ public class SignOutActivity {
         //sign out google provider
         googleSignInClient.signOut().addOnCompleteListener(activity, task -> {
             SharedPreferences sharedPreferences = activity.getSharedPreferences("CarRentalAppPrefs", Context.MODE_PRIVATE);
-            sharedPreferences.edit().remove("user_role").apply();  // Clear role on sign-out
+            sharedPreferences.edit().clear().apply(); // Clear all user data
 
             Intent intent = new Intent(activity, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

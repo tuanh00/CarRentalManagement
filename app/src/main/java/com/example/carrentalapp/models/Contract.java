@@ -3,6 +3,7 @@ package com.example.carrentalapp.models;
 
 import com.example.carrentalapp.states.contract.ContractState;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.PropertyName;
 
 public class Contract {
     private String id;
@@ -49,8 +50,10 @@ public class Contract {
 
     public void setTotalPayment(double totalPayment) { this.totalPayment = totalPayment; }
 
+    @PropertyName("status")
     public ContractState getState() { return state; }
 
+    @PropertyName("status")
     public void setState(ContractState state) { this.state = state; }
 
     public String getEventId() { return eventId; }
