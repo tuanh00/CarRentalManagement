@@ -20,11 +20,13 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.carrentalapp.R;
 import com.example.carrentalapp.common.ImagePreviewAdapter;
+import com.example.carrentalapp.common.ViewCarsFragment;
 import com.example.carrentalapp.states.car.CarAvailabilityState;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -90,6 +92,9 @@ public class AddCarFragment extends Fragment {
         checkLocationPermission();
         View view = inflater.inflate(R.layout.fragment_add_car, container, false);
 
+        db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
+
         inputCarModel = view.findViewById(R.id.inputCarModel);
         inputCarBrand = view.findViewById(R.id.inputCarBrand);
         inputCarSeats = view.findViewById(R.id.inputCarSeats);
@@ -98,9 +103,6 @@ public class AddCarFragment extends Fragment {
         buttonSelectImages = view.findViewById(R.id.buttonSelectImages);
         buttonSubmitCarDetails = view.findViewById(R.id.buttonSubmitCarDetails);
         imageRecyclerView = view.findViewById(R.id.imageRecyclerView);
-
-        db = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance();
 
         imageUris = new ArrayList<>();
         imagePreviewAdapter = new ImagePreviewAdapter(getContext(), imageUris, position -> confirmImageRemoval(position));
@@ -220,7 +222,7 @@ public class AddCarFragment extends Fragment {
         carData.put("rating", 0f);
         carData.put("ratingCount", 0);
         carData.put("createdAt", FieldValue.serverTimestamp());
-        carData.put("state", CarAvailabilityState.AVAILABLE.name());
+        carData.put("state", CarAvailabilityState.AVAILABLE.toString());
 
         db.collection("Cars").add(carData)
                 .addOnSuccessListener(documentReference -> {
@@ -229,7 +231,9 @@ public class AddCarFragment extends Fragment {
 
                     Toast.makeText(getContext(), "Car added successfully", Toast.LENGTH_SHORT).show();
                     clearFields();
-                    navigateToAdminDashboard();
+
+                    // Navigate to ViewCarsFragment
+                    navigateToViewCarsFragment();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), "Failed to add car: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -310,14 +314,14 @@ public class AddCarFragment extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
     /**
-     * Navigate back to AdminDashboardActivity after adding a car.
+     * Navigate back to ViewCarsFragment after adding a car.
      */
-    private void navigateToAdminDashboard() {
-        Intent intent = new Intent(getContext(), AdminDashboardActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        if (getActivity() != null) {
-            getActivity().finish();
-        }
+    private void navigateToViewCarsFragment() {
+        ViewCarsFragment viewCarsFragment = new ViewCarsFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.adminFragmentContainer, viewCarsFragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

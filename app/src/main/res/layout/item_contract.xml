@@ -13,6 +13,14 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/textViewUserAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email: "
+        android:layout_marginBottom="4dp"
+        android:textStyle="italic" />
+
+    <TextView
         android:id="@+id/textViewCarId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,6 +43,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Created At: " />
+    <TextView
+        android:id="@+id/textViewUpdatedAt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Updated At: " />
 
     <TextView
         android:id="@+id/textViewTotalPayment"

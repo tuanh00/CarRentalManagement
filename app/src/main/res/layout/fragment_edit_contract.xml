@@ -44,6 +44,24 @@
             android:text="N/A"
             android:textSize="16sp" />
 
+
+        <!-- User Email -->
+        <TextView
+            android:id="@+id/textViewUserEmailLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email:"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/textViewUserEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="N/A"
+            android:textSize="16sp" />
+
         <!-- Car ID -->
         <TextView
             android:id="@+id/textViewCarIdLabel"
@@ -93,7 +111,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="N/A"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            />
 
         <!-- Created At -->
         <TextView

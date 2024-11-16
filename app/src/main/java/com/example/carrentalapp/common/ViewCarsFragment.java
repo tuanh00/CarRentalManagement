@@ -17,7 +17,10 @@ import android.widget.Toast;
 import com.example.carrentalapp.R;
 import com.example.carrentalapp.models.Car;
 import com.example.carrentalapp.states.car.CarAvailabilityState;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -25,20 +28,17 @@ import java.util.ArrayList;
 
 public class ViewCarsFragment extends Fragment {
 
-
     private RecyclerView recyclerView;
     private CarAdapter carAdapter;
     private ArrayList<Car> carList;
     private FirebaseFirestore db;
-    private String carId;
     private static final String PREFS_NAME = "CarRentalAppPrefs";
     private static final String ROLE_KEY = "user_role";
+    private ListenerRegistration carListener; // Listen to the latest added car
 
     public ViewCarsFragment() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,54 +46,78 @@ public class ViewCarsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_view_cars, container, false);
 
+        db = FirebaseFirestore.getInstance();
+
         recyclerView = view.findViewById(R.id.recyclerViewCars);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         carList = new ArrayList<>();
-        carAdapter = new CarAdapter(getContext(), carList);
+        carAdapter = new CarAdapter(getContext(), carList, true);
         recyclerView.setAdapter(carAdapter);
-        db = FirebaseFirestore.getInstance();
 
         loadCars();
 
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Remove the listener when the view is destroyed to prevent memory leaks
+        if (carListener != null) {
+            carListener.remove();
+            carListener = null;
+        }
+    }
     private boolean isAdminUser() {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return "admin".equals(sharedPreferences.getString(ROLE_KEY, "customer"));
     }
 
     /**
-     * Load cars from Firestore based on user role.
+     * Load cars from the latest to the oldest and display based on user role.
      */
     private void loadCars() {
-        db.collection("Cars")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    carList.clear();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        Car car = document.toObject(Car.class);
-                        car.setId(document.getId());
+        // Remove existing listener if any
+        if (carListener != null) {
+            carListener.remove();
+        }
 
-                        // Retrieve and set the availability state based on the stored value
-                        String state = document.getString("state");
-                        if (state != null) {
-                            car.setCurrentState(CarAvailabilityState.valueOf(state.toUpperCase()));
-                        } else {
-                            car.setCurrentState(CarAvailabilityState.UNAVAILABLE); // Default if not set
-                        }
+        Query query = db.collection("Cars");
 
-                        if (isAdminUser() || car.getCurrentState() ==  CarAvailabilityState.AVAILABLE) {
-                            carList.add(car);
-                        }
+        if (!isAdminUser()) {
+            // If not admin, only show available cars
+            query = query.whereEqualTo("state", CarAvailabilityState.AVAILABLE.name());
+        }
+
+        // Order the cars by createdAt in descending order
+        query = query.orderBy("createdAt", Query.Direction.DESCENDING);
+
+        carListener = query.addSnapshotListener((queryDocumentSnapshots, e) -> {
+            if (e != null) {
+                Toast.makeText(getContext(), "Failed to load cars", Toast.LENGTH_SHORT).show();
+                Log.e("FirebaseError", "Error loading cars", e);
+                return;
+            }
+
+            if (queryDocumentSnapshots != null) {
+                carList.clear();
+                for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                    Car car = document.toObject(Car.class);
+                    car.setId(document.getId());
+
+                    // Retrieve and set the availability state based on the stored value
+                    String state = document.getString("state");
+                    if (state != null) {
+                        car.setCurrentState(CarAvailabilityState.valueOf(state.toUpperCase()));
+                    } else {
+                        car.setCurrentState(CarAvailabilityState.UNAVAILABLE); // Default if not set
                     }
-                    carAdapter.notifyDataSetChanged();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Failed to load cars", Toast.LENGTH_SHORT).show();
-                    Log.e("FirebaseError", "Error loading cars", e);
-                });
-    }
 
+                    carList.add(car);
+                }
+                carAdapter.notifyDataSetChanged();
+            }
+        });
+    }
 
 }

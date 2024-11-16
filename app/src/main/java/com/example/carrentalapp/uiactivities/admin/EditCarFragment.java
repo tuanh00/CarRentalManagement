@@ -34,6 +34,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -318,6 +319,7 @@ public class EditCarFragment extends Fragment {
         carData.put("location", location);
         carData.put("state", availabilityState.name());
         carData.put("images", imageUrls);
+        carData.put("updatedAt", FieldValue.serverTimestamp());
 
         db.collection("Cars").document(carId).update(carData)
                 .addOnSuccessListener(aVoid -> {

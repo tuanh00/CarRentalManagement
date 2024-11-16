@@ -2,6 +2,7 @@
 package com.example.carrentalapp.models;
 
 import com.example.carrentalapp.states.car.CarAvailabilityState;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.PropertyName;
 
 import java.util.ArrayList;
@@ -16,9 +17,11 @@ public class Car {
     private double price;
     private float rating;
     private int ratingCount;
-    private String createdAt;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
     @PropertyName("state")
     private CarAvailabilityState currentState;
+
     // Deprecated fields
     @Deprecated
     private double latitude;
@@ -119,6 +122,23 @@ public class Car {
     public void setCurrentState(CarAvailabilityState currentState) {
         this.currentState = currentState;
     }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     // Deprecated getters and setters
     @Deprecated
     public double getLatitude() { return latitude; }
