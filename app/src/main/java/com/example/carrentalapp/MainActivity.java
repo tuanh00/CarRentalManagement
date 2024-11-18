@@ -6,8 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.carrentalapp.auth.LoginActivity;
-import com.example.carrentalapp.main.CarRentalApp;
+import com.example.carrentalapp.utilities.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -22,16 +21,11 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if (currentUser != null) {
-            // User is logged in, redirect to the main app screen
-            Intent intent = new Intent(MainActivity.this, CarRentalApp.class);
-            startActivity(intent);
-        } else {
+        if (currentUser == null) {
             // No user logged in, redirect to the login screen
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         }
-
         // Close MainActivity so it doesn't remain in the back stack
         finish();
     }

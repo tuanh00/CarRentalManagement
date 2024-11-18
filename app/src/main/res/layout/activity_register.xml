@@ -1,79 +1,109 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
     android:background="@color/backgroundColor">
 
-    <EditText
-        android:id="@+id/firstName"
+    <!-- Centering LinearLayout with contents in the middle -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="First Name" />
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_gravity="center_vertical">
 
-    <EditText
-        android:id="@+id/lastName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Last Name" />
+        <!-- App Logo at the top -->
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/logocar2"
+            android:contentDescription="App Logo"
+            android:layout_marginBottom="24dp" />
 
-    <EditText
-        android:id="@+id/dobEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Date of Birth (YYYY-MM-DD)"
-        android:focusable="false"
-        android:clickable="true"
-        android:inputType="none" />
+        <!-- First Name Input Field -->
+        <EditText
+            android:id="@+id/firstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="First Name" />
 
-    <EditText
-        android:id="@+id/phoneNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Phone Number"
-        android:inputType="number" />
+        <!-- Last Name Input Field -->
+        <EditText
+            android:id="@+id/lastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Last Name" />
 
-    <EditText
-        android:id="@+id/driverLicenseId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Driver License ID (Optional)"
-        android:inputType="text" />
-    
-    <EditText
-        android:id="@+id/emailRegistration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textEmailAddress" />
+        <!-- Date of Birth Input Field -->
+        <EditText
+            android:id="@+id/dobEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date of Birth (YYYY-MM-DD)"
+            android:focusable="false"
+            android:clickable="true"
+            android:inputType="none" />
 
-    <EditText
-        android:id="@+id/passwordRegistration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword" />
+        <!-- Phone Number Input Field -->
+        <EditText
+            android:id="@+id/phoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone Number"
+            android:inputType="number" />
 
-    <EditText
-        android:id="@+id/confirmPasswordRegistration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Confirm Password"
-        android:inputType="textPassword" />
+        <!-- Driver License ID Input Field -->
+        <EditText
+            android:id="@+id/driverLicenseId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Driver License ID (Optional)"
+            android:inputType="text" />
 
-    <Button
-        android:id="@+id/registerbtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        android:backgroundTint="@color/primaryColor"
-        android:textColor="@color/textColor" />
+        <!-- Email Input Field -->
+        <EditText
+            android:id="@+id/emailRegistration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress" />
 
-    <Button
-        android:id="@+id/loginLink"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:backgroundTint="@color/secondaryColor"
-        android:textColor="@color/textColor" />
-</LinearLayout>
+        <!-- Password Input Field -->
+        <EditText
+            android:id="@+id/passwordRegistration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:inputType="textPassword" />
+
+        <!-- Confirm Password Input Field -->
+        <EditText
+            android:id="@+id/confirmPasswordRegistration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Confirm Password"
+            android:inputType="textPassword" />
+
+        <!-- Register Button -->
+        <Button
+            android:id="@+id/registerbtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@color/textColor"
+            android:layout_marginTop="12dp" />
+
+        <!-- Login Button -->
+        <Button
+            android:id="@+id/loginLink"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:backgroundTint="@color/secondaryColor"
+            android:textColor="@color/textColor"
+            android:layout_marginTop="12dp" />
+    </LinearLayout>
+</FrameLayout>

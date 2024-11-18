@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/tuanh00/CarRentalManagement#readme",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "firebase-admin": "^12.7.0",
+    "googleapis": "^144.0.0",
     "stripe": "^17.3.1"
   }
 }

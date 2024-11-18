@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="lightGrey">#D3D3D3</color>
     <color name="primaryColor">#0D47A1</color> <!-- Navy blue -->
     <color name="primaryLightColor">#5472D3</color> <!-- Light blue -->
     <color name="primaryDarkColor">#002171</color> <!-- Dark navy -->
@@ -9,5 +10,11 @@
     <color name="secondaryLightColor">#FFA040</color> <!-- Light orange -->
     <color name="secondaryDarkColor">#C43E00</color> <!-- Dark orange -->
     <color name="textColor">#FFFFFF</color> <!-- White for text on buttons -->
-    <color name="backgroundColor">#F5F5F5</color> <!-- Light gray for backgrounds -->
+    <color name="backgroundColor">#F6F1E8</color> <!-- Light gray for backgrounds -->
+    <color name="holo_red_dark">#CC0000</color> <!-- Red dark for remove button -->
+    <color name="button_background">#002171</color>
+    <color name="bottom_nav_icon_color">#0D47A1</color>
+    <color name="bottom_nav_text_color">#FFFFFFFF</color>
+    <color name="colorMoneyGreen">#4CAF50</color>
+    <color name="colorSeatBlue">#2196F3</color>
 </resources>

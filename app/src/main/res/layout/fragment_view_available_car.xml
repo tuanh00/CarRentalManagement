@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white"
+    >
+
+    <!-- Fragment Title -->
+<TextView
+android:id="@+id/textViewViewAvailableCarTitle"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Cars"
+android:textSize="24sp"
+android:textStyle="bold"
+android:layout_marginBottom="16dp"
+android:textColor="@color/black" />
+
+    <!-- Search Bar with Search Icon -->
+<com.google.android.material.textfield.TextInputLayout
+android:id="@+id/textInputLayoutSearch"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_marginHorizontal="0dp"
+android:layout_marginTop="8dp"
+app:boxBackgroundMode="outline"
+app:boxStrokeColor="@color/primaryColor"
+>
+
+<com.google.android.material.textfield.TextInputEditText
+    android:id="@+id/searchBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Search"
+    android:inputType="text"
+    android:padding="12dp"
+    android:textColorHint="@color/black" />
+</com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewCars"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

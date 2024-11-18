@@ -1,33 +1,113 @@
-<!-- res/layout/item_contract.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- item_contract.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="12dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:background="@color/white"
+    android:elevation="2dp"
+    android:layout_marginBottom="8dp">
 
+    <!-- Contract Details -->
     <TextView
-        android:id="@+id/carNameTextView"
+        android:id="@+id/textViewUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Car Name"
-        android:textStyle="bold" />
+        android:text="User: "
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@color/black"/>
 
     <TextView
-        android:id="@+id/rentalPeriodTextView"
+        android:id="@+id/textViewUserAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rental Period" />
+        android:text="Email: "
+        android:layout_marginBottom="4dp"
+        android:textStyle="italic"
+        android:textSize="14sp"
+        android:textColor="@color/black"/>
 
     <TextView
-        android:id="@+id/totalPaymentTextView"
+        android:id="@+id/textViewCarId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Total Payment" />
+        android:text="Car ID: "
+        android:textSize="14sp"
+        android:textColor="@color/black"/>
 
     <TextView
-        android:id="@+id/statusTextView"
+        android:id="@+id/textViewStartDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Status" />
+        android:text="Start: "
+        android:textSize="14sp"
+        android:textColor="@color/black"/>
 
+    <TextView
+        android:id="@+id/textViewEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End: "
+        android:textSize="14sp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/textViewCreatedAt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Created At: "
+        android:textSize="14sp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/textViewUpdatedAt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Updated At: "
+        android:textSize="14sp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/textViewTotalPayment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total: $"
+        android:textSize="14sp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/textViewStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status: "
+        android:textSize="14sp"
+        android:textColor="@color/black"/>
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/buttonViewDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Details"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/buttonEditContract"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="8dp"
+            android:visibility="gone" />
+    </LinearLayout>
 </LinearLayout>

@@ -1,63 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/backgroundColor">
+    android:background="@color/white">
 
-    <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
+    <!-- Top Toolbar with Logo and Title -->
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/adminToolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        android:title="Admin Dashboard" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primaryColor"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+        android:elevation="4dp"
+        app:titleTextAppearance="@style/Toolbar.TitleText">
 
-    <!-- Navigation Buttons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="16dp">
-
-        <Button
-            android:id="@+id/buttonAddCar"
+        <!-- Container for Logo and Title -->
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Car"
-            android:backgroundTint="@color/primaryColor"
-            android:textColor="@color/white" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <Button
-            android:id="@+id/buttonViewCars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="View Cars"
-            android:backgroundTint="@color/primaryColor"
-            android:textColor="@color/white"
-            android:layout_marginStart="8dp" />
+            <!-- Logo ImageView -->
+            <ImageView
+                android:id="@+id/logoImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/logocar2"
+                android:contentDescription="@string/logo_description"
+                android:layout_marginEnd="8dp" />
 
-        <Button
-            android:id="@+id/btnSignOut"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sign Out"
-            android:backgroundTint="@color/secondaryColor"
-            android:textColor="@color/white"
-            android:layout_marginStart="8dp" />
-    </LinearLayout>
+            <!-- Title TextView -->
+            <TextView
+                android:id="@+id/toolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Admin Dashboard"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                />
 
-    <!-- Fragment Container -->
+        </LinearLayout>
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <!-- Content Area for Fragments -->
     <FrameLayout
         android:id="@+id/adminFragmentContainer"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="16dp"
-        android:background="#F1F1F1" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="56dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_gravity="top" />
 
-</LinearLayout>
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemIconTint="@color/bottom_nav_icon_color"
+        app:itemTextColor="@color/bottom_nav_text_color"
+        app:labelVisibilityMode="unlabeled" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
