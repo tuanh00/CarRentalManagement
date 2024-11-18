@@ -1,22 +1,27 @@
+// ViewAvailableCarFragment.java
 package com.example.carrentalapp.uiactivities.customer;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull; // Import NonNull
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log; // Import Log
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carrentalapp.R;
 import com.example.carrentalapp.common.CarAdapter;
 import com.example.carrentalapp.models.Car;
 import com.example.carrentalapp.states.car.CarAvailabilityState;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -28,10 +33,12 @@ public class ViewAvailableCarFragment extends Fragment {
     private CarAdapter carAdapter;
     private ArrayList<Car> carList;
     private FirebaseFirestore db;
+    private TextInputEditText searchBar;
 
     public ViewAvailableCarFragment() {
         // Required empty public constructor
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,10 +67,34 @@ public class ViewAvailableCarFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_view_available_car, container, false);
+
+        // Initialize UI elements
+        searchBar = view.findViewById(R.id.searchBar);
         recyclerView = view.findViewById(R.id.recyclerViewCars);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         carAdapter = new CarAdapter(requireContext(), carList, false);
         recyclerView.setAdapter(carAdapter);
+
+        // Set up TextWatcher for search
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // No action needed before text changes
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Trigger search when text changes
+                String searchText = s.toString().toLowerCase();
+                filterCars(searchText);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // No action needed after text changes
+            }
+        });
+
         return view;
     }
 

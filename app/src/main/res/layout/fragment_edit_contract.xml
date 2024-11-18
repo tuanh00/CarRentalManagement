@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -9,7 +10,19 @@
         android:id="@+id/linearLayoutEditContract"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
+
+        <!-- Fragment Title -->
+        <TextView
+            android:id="@+id/textViewEditContractTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Contract"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/black" />
 
         <!-- Contract ID (Hidden or Displayed for reference) -->
         <TextView
@@ -43,7 +56,6 @@
             android:layout_height="wrap_content"
             android:text="N/A"
             android:textSize="16sp" />
-
 
         <!-- User Email -->
         <TextView
@@ -204,7 +216,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Update Status"
-            android:layout_marginTop="24dp" />
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 </ScrollView>

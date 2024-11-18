@@ -60,7 +60,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
         // Set data to the views
         holder.carBrandModel.setText(car.getBrand() + " " + car.getModel());
-        holder.carPrice.setText("$" + car.getPrice());
+        holder.carPrice.setText("" + car.getPrice());
         holder.carSeats.setText(String.valueOf(car.getSeats()));
         holder.carLocation.setText(car.getLocation());
         holder.carRating.setRating(car.getRating());

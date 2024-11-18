@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">CarRentalApp</string>
+    <string name="logo_description">App Logo</string>
+    <string name="location_icon_description">Location Icon</string>
+    <string name="seat_icon_description">Seat Icon</string>
+    <string name="price_icon_description">Price Icon</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!--    <string name="default_web_client_id">655767929093-gf9s46ntmtpogtmh5ubstrtkrvqj4bqs.apps.googleusercontent.com</string>-->
     <!--    <string name="stripe_publishable_key">pk_test_51QHBq6P4a6KosqaCOMYsupXhwkMPwCCi4TaarRmz0eOyaxs1m4LT6S5Ut65dULxW4hQ8P9TxjxQeeAcnzdhjY2c200jwAdztBR</string>-->

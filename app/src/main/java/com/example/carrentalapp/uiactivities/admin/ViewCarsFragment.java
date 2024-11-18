@@ -1,4 +1,4 @@
-package com.example.carrentalapp.common;
+package com.example.carrentalapp.uiactivities.admin;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,13 +15,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.carrentalapp.R;
+import com.example.carrentalapp.common.CarAdapter;
 import com.example.carrentalapp.models.Car;
 import com.example.carrentalapp.states.car.CarAvailabilityState;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 
