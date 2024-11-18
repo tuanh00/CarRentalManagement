@@ -20,12 +20,8 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CarRentalApp"
+        android:theme="@style/AppTheme"
         tools:targetApi="31">
-<!--        <activity-->
-<!--            android:name=".splash.Splash"-->
-<!--            android:exported="false" />-->
-        <!-- Splash Activity set as the launcher activity -->
         <activity
             android:name=".splash.Splash"
             android:exported="true">
@@ -34,16 +30,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- Add your Stripe publishable key here -->
-        <!-- <meta-data -->
-        <!-- android:name="com.stripe.android.API_KEY" -->
-        <!-- android:value="pk_test_51QHBq6P4a6KosqaCOMYsupXhwkMPwCCi4TaarRmz0eOyaxs1m4LT6S5Ut65dULxW4hQ8P9TxjxQeeAcnzdhjY2c200jwAdztBR" /> -->
         <meta-data
             android:name="com.stripe.android.API_KEY"
-            android:value="${STRIPE_PUBLISHABLE_KEY}" /> <!-- Add your Android API key auto created by Firebase here -->
-        <!-- <meta-data -->
-        <!-- android:name="com.google.android.geo.API_KEY" -->
-        <!-- android:value="AIzaSyCwQ6Ybku5uvSn11wRm2xJorRY2wec_jaA" /> -->
+            android:value="${STRIPE_PUBLISHABLE_KEY}" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${GOOGLE_MAPS_API_KEY}" />
@@ -60,18 +49,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
-        <activity
-            android:name=".main.CarRentalApp"
-            android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".utilities.LoginActivity"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
         <activity
             android:name=".utilities.LoginActivity"
             android:exported="true" />

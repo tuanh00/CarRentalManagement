@@ -1,14 +1,11 @@
-// EditContractFragment.java
 package com.example.carrentalapp.uiactivities.admin;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-// Import SwitchCompat for status toggle
 import androidx.appcompat.widget.SwitchCompat;
 
 import android.widget.TextView;
@@ -19,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.carrentalapp.R;
-import com.example.carrentalapp.common.ViewContractsFragment;
 import com.example.carrentalapp.states.contract.ContractState;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
@@ -33,11 +29,15 @@ import java.util.Map;
 
 public class EditContractFragment extends Fragment {
 
-    private TextView eventIdTextView, userFulleNameTextView, carIdTextView, startDateTextView, endDateTextView, totalPaymentTextView, statusTextView, createdAtTextView, updatedAtTextView, toggleStatusLabel;
+    private TextView eventIdTextView, userFullNameTextView, userEmailTextView, carIdTextView,
+            startDateTextView, endDateTextView, totalPaymentTextView, statusTextView, createdAtTextView,
+            updatedAtTextView, toggleStatusLabel;
     private SwitchCompat statusSwitch;
     private Button buttonUpdateStatus;
     private FirebaseFirestore db;
     private String eventId;
+    private ContractState currentStatus, newStatus;
+    private double totalPayment;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,7 +57,8 @@ public class EditContractFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         // Initialize UI components
         eventIdTextView = view.findViewById(R.id.textViewContractId);
-        userFulleNameTextView = view.findViewById(R.id.textViewUserFullName);
+        userFullNameTextView = view.findViewById(R.id.textViewUserFullName);
+        userEmailTextView = view.findViewById(R.id.textViewUserEmail);
         carIdTextView = view.findViewById(R.id.textViewCarId);
         startDateTextView = view.findViewById(R.id.textViewStartDate);
         endDateTextView = view.findViewById(R.id.textViewEndDate);
@@ -74,42 +75,63 @@ public class EditContractFragment extends Fragment {
         if (bundle != null) {
             eventId = bundle.getString("eventId", "N/A");
             String userFullName = bundle.getString("fullName", "N/A");
+            String userEmail = bundle.getString("email", "N/A");
             String carId = bundle.getString("carId", "N/A");
             Timestamp startDate = bundle.getParcelable("startDate");
             Timestamp endDate = bundle.getParcelable("endDate");
             Timestamp createdAt = bundle.getParcelable("createdAt");
             Timestamp updatedAt = bundle.getParcelable("updatedAt");
-            double totalPayment = bundle.getDouble("totalPayment", 0.0);
-            String status = bundle.getString("status", "N/A");
+            totalPayment = bundle.getDouble("totalPayment", 0.0);
+            String statusString = bundle.getString("status", "N/A");
+            try {
+                currentStatus = ContractState.valueOf(statusString.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                currentStatus = ContractState.ACTIVE; // Default to ACTIVE if status is invalid
+            }
 
             // Set UI with values
             eventIdTextView.setText(eventId);
-            userFulleNameTextView.setText(userFullName);
+            userFullNameTextView.setText(userFullName);
+            userEmailTextView.setText(userEmail);
             carIdTextView.setText(carId);
             startDateTextView.setText(formatTimestamp(startDate));
-            endDateTextView.setText(formatTimestamp(endDate));
+            endDateTextView.setText(formatTimestamp(endDate)); // Display end date
             createdAtTextView.setText(formatTimestamp(createdAt));
             updatedAtTextView.setText(formatTimestamp(updatedAt));
-            totalPaymentTextView.setText("Total Payment: $" + totalPayment);
-            statusTextView.setText(status);
-
+            totalPaymentTextView.setText("$" + totalPayment);
+            statusTextView.setText(currentStatus.toString());
 
             // Set status toggle label and switch text based on current status
-            if (ContractState.ACTIVE.toString().equalsIgnoreCase(status)) {
-                toggleStatusLabel.setText("Set Status to Completed:");
-                statusSwitch.setText("Completed");
-                statusSwitch.setChecked(false);
-            } else if (ContractState.COMPLETED.toString().equalsIgnoreCase(status)) {
-                toggleStatusLabel.setText("Set Status to Canceled:");
-                statusSwitch.setText("Canceled");
-                statusSwitch.setChecked(true);
-            }
+            setupStatusToggle();
 
             buttonUpdateStatus.setOnClickListener(v -> updateContractStatus());
         } else {
             Toast.makeText(getContext(), "Failed to load contract details", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void setupStatusToggle() {
+        switch (currentStatus) {
+            case ACTIVE:
+                toggleStatusLabel.setText("Set Status to Completed:");
+                statusSwitch.setText("Completed");
+                break;
+            case COMPLETED:
+                toggleStatusLabel.setText("Set Status to Canceled:");
+                statusSwitch.setText("Canceled");
+                break;
+            case CANCELED:
+                toggleStatusLabel.setText("Set Status to Active:");
+                statusSwitch.setText("Active");
+                break;
+            default:
+                toggleStatusLabel.setText("Set Status:");
+                statusSwitch.setText("Unknown");
+                break;
+        }
+        statusSwitch.setChecked(false); // Ensure the switch is unchecked initially
+    }
+
     private String formatTimestamp(Timestamp timestamp) {
         if (timestamp == null) return "N/A";
         Date date = timestamp.toDate();
@@ -126,9 +148,29 @@ public class EditContractFragment extends Fragment {
             return;
         }
 
-        String newStatus = statusSwitch.isChecked() ? ContractState.COMPLETED.toString() : ContractState.CANCELED.toString();
+        if (!statusSwitch.isChecked()) {
+            Toast.makeText(getContext(), "Please toggle the switch to confirm status update", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Determine the new status based on current status
+        switch (currentStatus) {
+            case ACTIVE:
+                newStatus = ContractState.COMPLETED;
+                break;
+            case COMPLETED:
+                newStatus = ContractState.CANCELED;
+                break;
+            case CANCELED:
+                newStatus = ContractState.ACTIVE;
+                break;
+            default:
+                Toast.makeText(getContext(), "Invalid current status", Toast.LENGTH_SHORT).show();
+                return;
+        }
+
         Map<String, Object> updates = new HashMap<>();
-        updates.put("status", newStatus);
+        updates.put("status", newStatus.toString());
         updates.put("updatedAt", FieldValue.serverTimestamp());
 
         // Query Firestore to find the document ID by eventId
@@ -148,7 +190,7 @@ public class EditContractFragment extends Fragment {
                                     // Set a result to notify ViewContractsFragment of the update
                                     getParentFragmentManager().setFragmentResult("contractUpdated", new Bundle());
 
-                                    // Navigate back to the navigateToViewContractFragment
+                                    // Navigate back to the ViewContractsFragment
                                     navigateToViewContractFragment();
                                 })
                                 .addOnFailureListener(e -> {
@@ -164,7 +206,7 @@ public class EditContractFragment extends Fragment {
     }
 
     /**
-     * Navigate back to navigateToViewContractFragment after updating the contract.
+     * Navigate back to ViewContractsFragment after updating the contract.
      */
     private void navigateToViewContractFragment() {
         Fragment viewContractsFragment = new ViewContractsFragment();
@@ -175,5 +217,4 @@ public class EditContractFragment extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
-
 }

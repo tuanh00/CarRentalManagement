@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_view_available_cars"
+        android:icon="@drawable/ic_car_rental"
+        android:title="Available Cars" />
+
+    <item
+        android:id="@+id/navigation_view_available_contracts"
+        android:icon="@drawable/ic_view_contracts"
+        android:title="Contract" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="Profile" />
+
+    <item
+        android:id="@+id/navigation_sign_out"
+        android:icon="@drawable/ic_sign_out"
+        android:title="Sign Out" />
+</menu>

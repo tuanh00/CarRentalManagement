@@ -121,12 +121,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-//    private void initializeGoogleCalendarCredential(String accountName) {
-//        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putString(GOOGLE_ACCOUNT_NAME_KEY, accountName);
-//        editor.apply();
-//    }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -204,25 +198,21 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void navigateToDashboard(String role) {
-        if ("admin".equals(role)) {
-            navigateToAdminDashboard();
-        } else {
-            navigateToCustomerDashboard();
-        }
-    }
-
-
     private void checkRoleInFirestore(String userId) {
         db.collection("Users").document(userId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         String role = documentSnapshot.getString("role");
-                        if ("admin".equals(role)) {
-                            navigateToAdminDashboard();
-                        } else {
-                            navigateToCustomerDashboard();
-                        }
+                        String firstName = documentSnapshot.getString("firstName");
+                        String lastName = documentSnapshot.getString("lastName");
+                        String email = documentSnapshot.getString("email");
+
+                        // Save user details to preferences
+                        saveUserDetailsToPreferences(userId, email, role, firstName, lastName);
+
+                        // Navigate to the appropriate dashboard
+                        navigateToDashboard(role);
+
                     } else {
                         Toast.makeText(this, "User profile not found.", Toast.LENGTH_SHORT).show();
                     }
@@ -232,7 +222,13 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-
+    private void navigateToDashboard(String role) {
+        if ("admin".equals(role)) {
+            navigateToAdminDashboard();
+        } else {
+            navigateToCustomerDashboard();
+        }
+    }
 
     private void navigateToAdminDashboard() {
         Intent intent = new Intent(this, AdminDashboardActivity.class);

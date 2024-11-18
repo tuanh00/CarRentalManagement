@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -25,25 +25,83 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:textStyle="bold" />
-        <!-- Car Location -->
-        <TextView
-            android:id="@+id/carLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp" />
+            android:textStyle="bold"
+            android:textColor="@color/black" />
 
-        <TextView
-            android:id="@+id/carSeats"
+        <!-- Car Location with Icon -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
 
-        <TextView
-            android:id="@+id/carPrice"
+            <ImageView
+                android:id="@+id/icLocation"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_location"
+                android:contentDescription="@string/location_icon_description"
+                app:tint="@color/secondaryColor" />
+
+            <TextView
+                android:id="@+id/carLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginStart="4dp"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <!-- Car Seats with Icon -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+
+            <ImageView
+                android:id="@+id/icSeat"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_seat"
+                android:contentDescription="@string/seat_icon_description"
+                app:tint="@color/colorSeatBlue" />
+
+            <TextView
+                android:id="@+id/carSeats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginStart="4dp"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <!-- Car Price with Icon -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+
+            <ImageView
+                android:id="@+id/icPrice"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_price"
+                android:contentDescription="@string/price_icon_description"
+                app:tint="@color/colorMoneyGreen" />
+
+            <TextView
+                android:id="@+id/carPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginStart="4dp"
+                android:textColor="@color/black" />
+        </LinearLayout>
 
         <RatingBar
             android:id="@+id/carRating"
@@ -52,7 +110,10 @@
             android:isIndicator="true"
             android:numStars="5"
             android:stepSize="0.5"
-            style="?android:attr/ratingBarStyleSmall" />
+            style="?android:attr/ratingBarStyleSmall"
+            android:progressTint="@color/secondaryLightColor"
+            android:secondaryProgressTint="@color/secondaryLightColor"
+            android:backgroundTint="@color/secondaryLightColor" />
 
         <TextView
             android:id="@+id/ratingCount"

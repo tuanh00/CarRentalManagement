@@ -1,65 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
+
+        <!-- Fragment Title -->
+        <TextView
+            android:id="@+id/textViewAddCarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add New Car"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/black" />
 
         <EditText
             android:id="@+id/inputCarModel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Car Model"/>
+            android:hint="Car Model"
+            android:layout_marginBottom="8dp"/>
 
         <EditText
             android:id="@+id/inputCarBrand"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Car Brand"/>
+            android:hint="Car Brand"
+            android:layout_marginBottom="8dp"/>
 
         <EditText
             android:id="@+id/inputCarSeats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Seats"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:layout_marginBottom="8dp"/>
 
         <EditText
             android:id="@+id/inputCarLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Location"/>
+            android:hint="Location"
+            android:layout_marginBottom="8dp"/>
 
         <EditText
             android:id="@+id/inputCarPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Price"
-            android:inputType="numberDecimal"/>
+            android:inputType="numberDecimal"
+            android:layout_marginBottom="16dp"/>
 
         <Button
             android:id="@+id/buttonSelectImages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select Images"/>
+            android:text="Select Images"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="8dp"/>
 
         <!-- RecyclerView to show selected image previews -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/imageRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"/>
 
         <Button
             android:id="@+id/buttonSubmitCarDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Submit"
-            android:padding="12dp"/>
+            android:padding="12dp"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="16dp"/>
 
     </LinearLayout>
 </ScrollView>

@@ -1,6 +1,8 @@
 // Contract.java
 package com.example.carrentalapp.models;
 
+import android.os.Parcelable;
+
 import com.example.carrentalapp.states.contract.ContractState;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.PropertyName;
@@ -12,6 +14,7 @@ public class Contract {
     private Timestamp createdAt;
     private Timestamp startDate;
     private Timestamp endDate;
+    private Timestamp updatedAt;
     private double totalPayment;
     private ContractState state;
     private String eventId;
@@ -44,6 +47,14 @@ public class Contract {
 
     public Timestamp getEndDate() { return endDate; }
 
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public void setEndDate(Timestamp endDate) { this.endDate = endDate; }
 
     public double getTotalPayment() { return totalPayment; }
@@ -59,4 +70,5 @@ public class Contract {
     public String getEventId() { return eventId; }
 
     public void setEventId(String eventId) { this.eventId = eventId; }
+
 }

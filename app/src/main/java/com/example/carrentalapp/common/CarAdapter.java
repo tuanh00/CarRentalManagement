@@ -19,11 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.carrentalapp.R;
+import com.example.carrentalapp.models.Contract;
 import com.example.carrentalapp.states.car.CarAvailabilityState;
 import com.example.carrentalapp.uiactivities.admin.EditCarFragment;
 import com.example.carrentalapp.models.Car;
 import com.example.carrentalapp.uiactivities.customer.RentCarFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,19 +37,15 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
     private List<Car> carList;
     private Context context;
-    private static final String PREFS_NAME = "CarRentalAppPrefs";
-    private static final String ROLE_KEY = "user_role";
-    private FirebaseFirestore db;
+    private boolean isAdmin;
 
-    public CarAdapter(Context context, List<Car> carList) {
+    public CarAdapter(Context context, List<Car> carList, boolean isAdmin) {
         this.context = context;
         this.carList = carList;
-        this.db = FirebaseFirestore.getInstance();
+        this.isAdmin = isAdmin;
     }
-    private boolean isAdminUser() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        return "admin".equals(sharedPreferences.getString(ROLE_KEY, "customer"));
-    }
+
+
     @NonNull
     @Override
     public CarViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -56,15 +55,18 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull CarViewHolder holder, int position) {
+        // Get the current car
         Car car = carList.get(position);
+
+        // Set data to the views
         holder.carBrandModel.setText(car.getBrand() + " " + car.getModel());
-        holder.carPrice.setText("Price per day: $" + car.getPrice()); // Ensure it shows correctly
+        holder.carPrice.setText("" + car.getPrice());
         holder.carSeats.setText(String.valueOf(car.getSeats()));
         holder.carLocation.setText(car.getLocation());
         holder.carRating.setRating(car.getRating());
-        holder.ratingCount.setText(car.getRatingCount() + " ratings"); // Show rating count as "x ratings"
+        holder.ratingCount.setText(car.getRatingCount() + " ratings");
 
-        // Load car images into the ImageView (displaying the first image as a preview)
+        // Load car images
         if (car.getImages() != null && !car.getImages().isEmpty()) {
             Glide.with(context)
                     .load(car.getImages().get(0))
@@ -74,8 +76,8 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
             holder.carImage.setImageResource(R.drawable.car_placeholder);
         }
 
-        // Display appropriate action for admin and customer
-        if (isAdminUser()) {
+        // Set up the action button based on user role
+        if (isAdmin) {
             holder.actionButton.setEnabled(true);
             holder.actionButton.setText("Edit");
         } else {
@@ -87,13 +89,12 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
                 holder.actionButton.setText("Unavailable");
             }
         }
-        // Set button click listener
+
+        // Handle click events on the action button
         holder.actionButton.setOnClickListener(v -> {
-            if (isAdminUser()) {
+            if (isAdmin) {
                 FragmentActivity fragmentActivity = (FragmentActivity) context;
                 EditCarFragment editCarFragment = new EditCarFragment();
-
-                //pass car details to EditCarFragment
                 Bundle bundleEdit = new Bundle();
                 bundleEdit.putString("carId", car.getId());
                 bundleEdit.putString("carBrand", car.getBrand());
@@ -102,7 +103,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
                 bundleEdit.putInt("carSeats", car.getSeats());
                 bundleEdit.putDouble("carPrice", car.getPrice());
                 bundleEdit.putStringArrayList("carImageUrls", new ArrayList<>(car.getImages()));
-                bundleEdit.putString("availabilityState", car.getCurrentState().name());
+                bundleEdit.putString("state", car.getCurrentState().toString());
 
                 editCarFragment.setArguments(bundleEdit);
 
@@ -115,8 +116,6 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
                 if(car.getCurrentState() == CarAvailabilityState.AVAILABLE) {
                     FragmentActivity fragmentActivity = (FragmentActivity) context;
                     RentCarFragment rentCarFragment = new RentCarFragment();
-
-                    //pass car details to RentCarFragment
                     Bundle bundle = new Bundle();
                     bundle.putString("carId", car.getId());
                     bundle.putString("carBrandModel", car.getBrand() + " " + car.getModel());
@@ -144,30 +143,10 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
     public int getItemCount() {
         return carList.size();
     }
-
-
-    public void updateCarDetails(String carId, String newBrand, String newModel, int newSeats, double newPrice, ArrayList<String> newImages) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        // Create a map with the updated fields
-        Map<String, Object> updates = new HashMap<>();
-        updates.put("brand", newBrand);
-        updates.put("model", newModel);
-        updates.put("seats", newSeats);
-        updates.put("price", newPrice);
-        updates.put("images", newImages);
-
-        // Update the car in Firestore
-        db.collection("Cars").document(carId).update(updates)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(context, "Car updated successfully", Toast.LENGTH_SHORT).show();
-                    notifyDataSetChanged(); // Refresh adapter data if necessary
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Failed to update car: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+    public void updateData(List<Car> newCarList) {
+        this.carList = newCarList;
+        notifyDataSetChanged();
     }
-
     public static class CarViewHolder extends RecyclerView.ViewHolder {
         TextView carBrandModel, carLocation, carPrice, carSeats, ratingCount;
         ImageView carImage;

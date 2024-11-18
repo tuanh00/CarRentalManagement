@@ -3,7 +3,6 @@ package com.example.carrentalapp.uiactivities.customer;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,21 +20,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.example.carrentalapp.R;
+import com.example.carrentalapp.uiactivities.admin.ViewContractsFragment;
+import com.example.carrentalapp.states.car.CarAvailabilityState;
 import com.example.carrentalapp.states.contract.ContractState;
 import com.example.carrentalapp.utilities.GoogleCalendarHelper;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.paymentsheet.PaymentSheet;
 import com.stripe.android.paymentsheet.PaymentSheetResult;
@@ -70,7 +68,7 @@ public class RentCarFragment extends Fragment {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private GoogleCalendarHelper calendarHelper;
-    private String carId;
+    private String carId, eventId;
     private double pricePerDay;
     private double totalPayment;
     private Date startDate, endDate;
@@ -186,13 +184,14 @@ public class RentCarFragment extends Fragment {
 
     private void createEventAndSaveContract(Date startDate, Date endDate) {
         new Thread(() -> {
-            String eventId = "failed_event";
+            eventId = "failed_event";
             try {
                 eventId = calendarHelper.createEvent("Rent Car ID: " + carId, startDate, endDate);
                 if (getActivity() != null) {
-                    getActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), "Calendar event created successfully!", Toast.LENGTH_SHORT).show()
-                    );
+                    getActivity().runOnUiThread(() -> {
+                        Toast.makeText(getContext(), "Calendar event created successfully!", Toast.LENGTH_SHORT).show();
+                        saveContractToFirestore(eventId, startDate, endDate);
+                    });
                 }
             } catch (Exception e) {
                 if (getActivity() != null) {
@@ -202,18 +201,13 @@ public class RentCarFragment extends Fragment {
                 }
             }
 
-            saveContractToFirestore(eventId, startDate, endDate); // Save the contract regardless of calendar event success
         }).start();
     }
 
     private void saveContractToFirestore(String eventId, Date startDate, Date endDate) {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "User not logged in", Toast.LENGTH_SHORT).show()
-                );
-            }
+            Toast.makeText(getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -226,6 +220,7 @@ public class RentCarFragment extends Fragment {
         contractData.put("createdAt", Timestamp.now());
         contractData.put("startDate", new Timestamp(startDate));
         contractData.put("endDate", new Timestamp(endDate));
+        contractData.put("updateDate", null);
         contractData.put("totalPayment", totalPayment);
         contractData.put("status", ContractState.ACTIVE);
         contractData.put("eventId", eventId);
@@ -234,6 +229,18 @@ public class RentCarFragment extends Fragment {
                 .addOnSuccessListener(documentReference -> {
                     if (getContext() != null) {
                         Toast.makeText(getContext(), "Contract saved successfully.", Toast.LENGTH_SHORT).show();
+
+                        //Update car state to UNAVAILABLE
+                        db.collection("Cars").document(carId).update("state", CarAvailabilityState.UNAVAILABLE.toString())
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d("RentCarFragment", "Car state updated to UNAVAILABLE");
+                                })
+                                .addOnFailureListener(e -> {
+                                   Log.e("Rentcarfragment", "Failed to update car state: " + e.getMessage());
+                                });
+
+                        // Navigate to ViewContractsFragment
+                        navigateToViewContractsFragment();
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -292,14 +299,13 @@ public class RentCarFragment extends Fragment {
         }
     }
 
-    // Navigate to Customer Dashboard
-    private void navigateToCustomerDashboard() {
-        Intent intent = new Intent(getActivity(), CustomerDashboardActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Clear back stack
-        startActivity(intent);
-        if (getActivity() != null) {
-            getActivity().finish();
-        }
+    private void navigateToViewContractsFragment() {
+        ViewContractsFragment viewContractsFragment = new ViewContractsFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.customerFragmentContainer, viewContractsFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     //-------Stripe: make a network request to the server
@@ -408,8 +414,6 @@ public class RentCarFragment extends Fragment {
                     // Call the method to create contract and calendar event after successful payment
                     createEventAndSaveContract(startDate, endDate);
 
-                    // Navigate to the dashboard after successful payment
-                    navigateToCustomerDashboard();
                 });
             }
         } else if (paymentSheetResult instanceof PaymentSheetResult.Canceled) {
@@ -429,4 +433,3 @@ public class RentCarFragment extends Fragment {
     }
 
 }
-
