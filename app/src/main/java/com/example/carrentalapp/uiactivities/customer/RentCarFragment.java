@@ -113,6 +113,7 @@ public class RentCarFragment extends Fragment {
 
         // Bind views
         TextView carBrandModelTextView = view.findViewById(R.id.carBrandModel);
+        TextView carDescriptionTextView = view.findViewById(R.id.carDescription);
         TextView carLocationTextView = view.findViewById(R.id.carLocation);
         TextView carSeatsTextView = view.findViewById(R.id.carSeats);
         TextView carPriceTextView = view.findViewById(R.id.carPrice);
@@ -130,6 +131,7 @@ public class RentCarFragment extends Fragment {
         if (bundle != null) {
             carId = bundle.getString("carId");
             String carBrandModel = bundle.getString("carBrandModel");
+            String carDescription = bundle.getString("carDescription");
             String carLocation = bundle.getString("carLocation");
             int carSeats = bundle.getInt("carSeats");
             pricePerDay = bundle.getDouble("carPrice");
@@ -138,6 +140,7 @@ public class RentCarFragment extends Fragment {
 
             // Populate UI elements with car data
             carBrandModelTextView.setText(carBrandModel);
+            carDescriptionTextView.setText(carDescription);
             carLocationTextView.setText("Location: " + carLocation);
             carSeatsTextView.setText("Seats: " + carSeats);
             carPriceTextView.setText("Price per day: $" + pricePerDay);

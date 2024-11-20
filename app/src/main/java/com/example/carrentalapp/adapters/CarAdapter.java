@@ -96,6 +96,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
                 bundleEdit.putDouble("carPrice", car.getPrice());
                 bundleEdit.putStringArrayList("carImageUrls", new ArrayList<>(car.getImages()));
                 bundleEdit.putString("state", car.getCurrentState().toString());
+                bundleEdit.putString("carDescription", car.getDescription());
 
                 editCarFragment.setArguments(bundleEdit);
 
@@ -116,6 +117,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
                     bundle.putDouble("carPrice", car.getPrice());
                     bundle.putFloat("carRating", car.getRating());
                     bundle.putStringArrayList("carImageUrls", new ArrayList<>(car.getImages()));
+                    bundle.putString("carDescription", car.getDescription());
 
                     rentCarFragment.setArguments(bundle);
 
