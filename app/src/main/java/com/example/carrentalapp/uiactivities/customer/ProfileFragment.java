@@ -88,7 +88,7 @@ public class ProfileFragment extends Fragment {
 
         textViewUserName.setText(userName);
         textViewUserEmail.setText(userEmail);
-        textViewMemberSince.setText("Member Since: " + memberSince);
+        textViewMemberSince.setText(memberSince);
 
         // Load avatar image using Glide
         if (!TextUtils.isEmpty(imgUrl)) {
@@ -106,10 +106,12 @@ public class ProfileFragment extends Fragment {
      * Opens the image chooser to select a new avatar.
      */
     private void openFileChooser() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
+
 
     /**
      * Handles the result from the image chooser.

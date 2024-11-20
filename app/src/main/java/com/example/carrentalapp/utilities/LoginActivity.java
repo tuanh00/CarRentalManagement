@@ -162,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
                             db.collection("Users").document(user.getUid()).set(userData)
                                     .addOnSuccessListener(aVoid -> {
                                         // Save user details to preferences
-                                        saveUserDetailsToPreferences(user.getUid(), user.getEmail(), role, firstName, lastName, null);
+                                        saveUserDetailsToPreferences(user.getUid(), user.getEmail(), role, firstName, lastName, null, Timestamp.now());
                                         // Navigate after saving
                                         navigateToDashboard(role);
                                     })
@@ -174,6 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                             String imgUrl = document.getString("imgUrl");
                             String firstName = document.getString("firstName");
                             String lastName = document.getString("lastName");
+                            Timestamp createdAt = document.getTimestamp("createdAt");
 
                             // Check if user is blocked
                             if (isBlocked != null && isBlocked) {
@@ -182,14 +183,14 @@ public class LoginActivity extends AppCompatActivity {
                                 return; // Prevent further execution
                             }
 
-                            saveUserDetailsToPreferences(user.getUid(), user.getEmail(), role, firstName, lastName, imgUrl);
+                            saveUserDetailsToPreferences(user.getUid(), user.getEmail(), role, firstName, lastName, imgUrl, createdAt);
                             // Navigate after retrieving role
                             navigateToDashboard(role);
                         }
                     });
         }
     }
-    private void saveUserDetailsToPreferences(String userId, String email, String role, String firstName, String lastName, String imgUrl) {
+    private void saveUserDetailsToPreferences(String userId, String email, String role, String firstName, String lastName, String imgUrl, Timestamp createdAt) {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("user_id", userId);
@@ -199,6 +200,7 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("last_name", lastName);
         editor.putString("imgUrl", imgUrl);
         editor.putString(GOOGLE_ACCOUNT_NAME_KEY, email); // Save the Google account name
+        editor.putLong("createdAt", System.currentTimeMillis());
         editor.apply();
     }
 
@@ -230,6 +232,7 @@ public class LoginActivity extends AppCompatActivity {
                         String lastName = documentSnapshot.getString("lastName");
                         String email = documentSnapshot.getString("email");
                         String imgUrl = documentSnapshot.getString("imgUrl");
+                        Timestamp createdAt = documentSnapshot.getTimestamp("createdAt");
 
                         // Check if user is blocked
                         if (isBlocked != null && isBlocked) {
@@ -239,7 +242,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         // Save user details to preferences
-                        saveUserDetailsToPreferences(userId, email, role, firstName, lastName, imgUrl);
+                        saveUserDetailsToPreferences(userId, email, role, firstName, lastName, imgUrl, createdAt);
 
                         // Navigate to the appropriate dashboard
                         navigateToDashboard(role);
