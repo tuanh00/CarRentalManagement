@@ -57,7 +57,6 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
         holder.carLocation.setText(car.getLocation());
         holder.carRating.setRating(car.getRating());
         holder.ratingCount.setText(car.getRatingCount() + " ratings");
-        holder.carDescription.setText(car.getDescription());
 
         // Load car images
         if (car.getImages() != null && !car.getImages().isEmpty()) {
@@ -143,7 +142,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
         notifyDataSetChanged();
     }
     public static class CarViewHolder extends RecyclerView.ViewHolder {
-        TextView carBrandModel, carLocation, carPrice, carSeats, ratingCount, carDescription;
+        TextView carBrandModel, carLocation, carPrice, carSeats, ratingCount;
         ImageView carImage;
         RatingBar carRating;
         Button actionButton;
@@ -152,7 +151,6 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
             super(itemView);
 
             carBrandModel = itemView.findViewById(R.id.carBrandModel);
-            carDescription = itemView.findViewById(R.id.carDescription);
             carLocation = itemView.findViewById(R.id.carLocation);
             carPrice = itemView.findViewById(R.id.carPrice);
             carSeats = itemView.findViewById(R.id.carSeats);
