@@ -4,7 +4,7 @@ import java.io.FileNotFoundException
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.google.gms.google.services)
+   //alias(libs.plugins.google.gms.google.services)
 }
 
 val localProperties = Properties()

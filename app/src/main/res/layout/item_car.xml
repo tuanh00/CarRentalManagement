@@ -28,6 +28,15 @@
             android:textStyle="bold"
             android:textColor="@color/black" />
 
+        <TextView
+            android:id="@+id/carDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="10sp" />
+
         <!-- Car Location with Icon -->
         <LinearLayout
             android:layout_width="wrap_content"
@@ -103,6 +112,7 @@
                 android:textColor="@color/black" />
         </LinearLayout>
 
+
         <RatingBar
             android:id="@+id/carRating"
             android:layout_width="wrap_content"
@@ -121,6 +131,8 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray" />
+
+
     </LinearLayout>
 
     <Button

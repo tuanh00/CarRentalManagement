@@ -22,6 +22,10 @@ public class Car {
     @PropertyName("state")
     private CarAvailabilityState currentState;
 
+
+
+    private String description;
+
     // Deprecated fields
     @Deprecated
     private double latitude;
@@ -149,4 +153,12 @@ public class Car {
     public double getLongitude() { return longitude; }
     @Deprecated
     public void setLongitude(double longitude) { this.longitude = longitude; }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

@@ -36,7 +36,25 @@
             android:id="@+id/brandEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/cardview_shadow_end_color"
             android:hint="Enter car brand"
+            android:inputType="text"
+            android:padding="12dp" />
+
+        <TextView
+            android:id="@+id/textViewDescriptionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/descriptionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter car description"
             android:inputType="text"
             android:background="@color/cardview_shadow_end_color"
             android:padding="12dp" />
