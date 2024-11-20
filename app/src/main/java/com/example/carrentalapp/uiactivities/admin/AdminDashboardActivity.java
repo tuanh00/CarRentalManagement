@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.carrentalapp.BuildConfig;
 import com.example.carrentalapp.R;
-import com.example.carrentalapp.common.ProfileFragment;
 import com.example.carrentalapp.utilities.SignOutActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -90,9 +89,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 selectedFragment = new ViewCarsFragment();
             } else if (itemId == R.id.navigation_view_contracts) {
                 selectedFragment = new ViewContractsFragment();
-            } else if (itemId == R.id.navigation_profile) {
-                selectedFragment = new ProfileFragment();
-            } else if (itemId == R.id.navigation_sign_out) {
+            } else if (itemId == R.id.navigation_view_users) {
+                selectedFragment = new ViewUsersFragment();
+            }
+            else if (itemId == R.id.navigation_sign_out) {
                 // Handle sign out logic
                 SignOutActivity.signOut(this, mAuth, googleSignInClient);
                 return true; // Return true as we've handled the event

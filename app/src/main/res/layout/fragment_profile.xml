@@ -23,6 +23,28 @@
             android:layout_marginBottom="24dp"
             />
 
+        <!-- Avatar Image -->
+        <ImageView
+            android:id="@+id/imageViewAvatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_user_avatar_placeholder"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/user_avatar" />
+
+        <!-- Change Avatar Button -->
+        <Button
+            android:id="@+id/buttonChangeAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change Avatar"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/colorMoneyGreen"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="24dp" />
+
         <!-- Name Section -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutName"
@@ -39,7 +61,7 @@
                 android:enabled="false"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                 />
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Email Section -->
@@ -52,6 +74,23 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textViewUserEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Member Since Section -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutMemberSince"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Member Since"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textViewMemberSince"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"

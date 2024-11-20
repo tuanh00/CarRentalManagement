@@ -148,17 +148,21 @@ public class LoginActivity extends AppCompatActivity {
                             userData.put("email", user.getEmail());
                             userData.put("role", role);
                             userData.put("createdAt", Timestamp.now());
+                            userData.put("imgUrl", null);
+                            userData.put("blocked", false);
 
                             String firstName = user.getDisplayName() != null ? user.getDisplayName().split(" ")[0] : "";
                             String lastName = user.getDisplayName() != null ? user.getDisplayName().split(" ")[1] : "";
                             userData.put("firstName", firstName);
                             userData.put("lastName", lastName);
+                            userData.put("imgUrl", null);
+                            userData.put("blocked", false);
 
                             // Save user data to Firestore and navigate
                             db.collection("Users").document(user.getUid()).set(userData)
                                     .addOnSuccessListener(aVoid -> {
                                         // Save user details to preferences
-                                        saveUserDetailsToPreferences(user.getUid(), user.getEmail(), role, firstName, lastName);
+                                        saveUserDetailsToPreferences(user.getUid(), user.getEmail(), role, firstName, lastName, null);
                                         // Navigate after saving
                                         navigateToDashboard(role);
                                     })
@@ -166,16 +170,26 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // User already exists in Firestore, retrieve data to save in preferences
                             String role = document.getString("role");
+                            Boolean isBlocked = document.getBoolean("blocked");
+                            String imgUrl = document.getString("imgUrl");
                             String firstName = document.getString("firstName");
                             String lastName = document.getString("lastName");
-                            saveUserDetailsToPreferences(user.getUid(), user.getEmail(), role, firstName, lastName);
+
+                            // Check if user is blocked
+                            if (isBlocked != null && isBlocked) {
+                                Toast.makeText(this, "Your account has been blocked. Contact support.", Toast.LENGTH_LONG).show();
+                                mAuth.signOut();
+                                return; // Prevent further execution
+                            }
+
+                            saveUserDetailsToPreferences(user.getUid(), user.getEmail(), role, firstName, lastName, imgUrl);
                             // Navigate after retrieving role
                             navigateToDashboard(role);
                         }
                     });
         }
     }
-    private void saveUserDetailsToPreferences(String userId, String email, String role, String firstName, String lastName) {
+    private void saveUserDetailsToPreferences(String userId, String email, String role, String firstName, String lastName, String imgUrl) {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("user_id", userId);
@@ -183,11 +197,16 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString(ROLE_KEY, role);
         editor.putString("first_name", firstName);
         editor.putString("last_name", lastName);
+        editor.putString("imgUrl", imgUrl);
         editor.putString(GOOGLE_ACCOUNT_NAME_KEY, email); // Save the Google account name
         editor.apply();
     }
 
-
+    /**
+     * Determines the navigation flow based on the authentication provider.
+     * @param firebaseUser The authenticated Firebase user.
+     * @param provider The authentication provider ("google" or "password").
+     */
     private void navigateUser(FirebaseUser firebaseUser, String provider) {
         if (firebaseUser != null) {
             if ("google.com".equals(provider)) {
@@ -198,17 +217,29 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks the user's role and blocked status in Firestore for email/password sign-in.
+     */
     private void checkRoleInFirestore(String userId) {
         db.collection("Users").document(userId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         String role = documentSnapshot.getString("role");
+                        Boolean isBlocked = documentSnapshot.getBoolean("blocked");
                         String firstName = documentSnapshot.getString("firstName");
                         String lastName = documentSnapshot.getString("lastName");
                         String email = documentSnapshot.getString("email");
+                        String imgUrl = documentSnapshot.getString("imgUrl");
+
+                        // Check if user is blocked
+                        if (isBlocked != null && isBlocked) {
+                            Toast.makeText(this, "Your account has been blocked. Contact support.", Toast.LENGTH_LONG).show();
+                            mAuth.signOut();
+                            return;
+                        }
 
                         // Save user details to preferences
-                        saveUserDetailsToPreferences(userId, email, role, firstName, lastName);
+                        saveUserDetailsToPreferences(userId, email, role, firstName, lastName, imgUrl);
 
                         // Navigate to the appropriate dashboard
                         navigateToDashboard(role);

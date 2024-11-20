@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:layout_margin="8dp"
+    >
+
+    <!-- User Avatar -->
+    <ImageView
+        android:id="@+id/imageViewAvatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_user_avatar_placeholder"
+        android:scaleType="centerCrop"
+        android:background="@drawable/circle_background"
+        android:contentDescription="@string/user_avatar" />
+
+    <!-- User Details -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:paddingStart="12dp">
+
+        <TextView
+            android:id="@+id/textViewUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="John Doe"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/textViewUserEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="johndoe@example.com"
+            android:textSize="14sp"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
+    <!-- Block/Unblock Button -->
+    <Button
+        android:id="@+id/buttonBlockUnblock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Block"
+        android:backgroundTint="@color/colorActive"
+        android:textColor="@android:color/white"
+        android:padding="8dp"
+        android:layout_marginStart="8dp"/>
+</LinearLayout>

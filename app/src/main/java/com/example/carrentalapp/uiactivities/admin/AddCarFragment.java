@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.carrentalapp.R;
-import com.example.carrentalapp.common.ImagePreviewAdapter;
+import com.example.carrentalapp.adapters.ImagePreviewAdapter;
 import com.example.carrentalapp.states.car.CarAvailabilityState;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
