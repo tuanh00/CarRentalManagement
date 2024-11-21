@@ -2,20 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:padding="12dp"
-    android:layout_margin="8dp"
-    >
+    android:layout_margin="8dp">
 
     <!-- User Avatar -->
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageViewAvatar"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/ic_user_avatar_placeholder"
         android:scaleType="centerCrop"
-        android:background="@drawable/circle_background"
-        android:contentDescription="@string/user_avatar" />
+        android:contentDescription="@string/user_avatar"
+        app:shapeAppearanceOverlay="@style/CircularShape" />
 
     <!-- User Details -->
     <LinearLayout
@@ -23,7 +23,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_weight="1"
-        android:paddingStart="12dp">
+        android:paddingStart="12dp"
+        android:layout_marginTop="5dp"
+        >
 
         <TextView
             android:id="@+id/textViewUserName"
@@ -50,8 +52,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Block"
-        android:backgroundTint="@color/primaryColor"
         android:textColor="@android:color/white"
         android:padding="8dp"
-        android:layout_marginStart="8dp"/>
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        />
 </LinearLayout>

@@ -2,6 +2,7 @@
 package com.example.carrentalapp.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.carrentalapp.R;
 import com.example.carrentalapp.models.User;
+import com.example.carrentalapp.states.contract.ContractState;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
@@ -27,9 +29,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     private boolean isAdmin;
 
     /**
-     * Constructor for UserAdapter.
-     * @param context The context in which the adapter is used.
-     * @param userList The list of users to display.
      * @param isAdmin Flag indicating if the current user is an admin.
      */
     public UserAdapter(Context context, List<User> userList, boolean isAdmin) {
@@ -93,24 +92,39 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     /**
      * Toggles the blocked status of a user.
-     * @param user The user whose status is to be toggled.
-     * @param position The position of the user in the list.
      */
     private void toggleBlockStatus(User user, int position) {
-        boolean newStatus = !user.isBlocked();
-        db.collection("Users").document(user.getUid())
-                .update("blocked", newStatus)
-                .addOnSuccessListener(aVoid -> {
-                    user.setBlocked(newStatus);
-                    notifyItemChanged(position);
-                    String message = newStatus ? "User blocked successfully" : "User unblocked successfully";
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        // Reference to the Contracts collection
+        db.collection("Contracts")
+                .whereEqualTo("userId", user.getUid())
+                .whereEqualTo("status", ContractState.ACTIVE.toString())
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (querySnapshot.isEmpty()) {
+                        // No active contracts found, proceed to toggle block status
+                        boolean newStatus = !user.isBlocked();
+                        db.collection("Users").document(user.getUid())
+                                .update("blocked", newStatus)
+                                .addOnSuccessListener(aVoid -> {
+                                    user.setBlocked(newStatus);
+                                    notifyItemChanged(position);
+                                    String message = newStatus ? "User blocked successfully" : "User unblocked successfully";
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(context, "Failed to update status: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    } else {
+                        // Active contracts exist, cannot block the user
+                        Toast.makeText(context, "Cannot block user with active contracts.", Toast.LENGTH_SHORT).show();
+                    }
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Failed to update status: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    // Handle any errors while fetching contracts
+                    Toast.makeText(context, "Failed to verify contracts: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("UserAdapter", "Error fetching contracts for user " + user.getUid(), e);
                 });
     }
-
     /**
      * ViewHolder class for user items.
      */

@@ -205,9 +205,6 @@ public class ContractAdapter extends RecyclerView.Adapter<ContractAdapter.Contra
 
     /**
      * Formats Firebase Timestamp to a readable date string.
-     *
-     * @param timestamp The Firebase Timestamp.
-     * @return Formatted date string.
      */
     private String formatTimestamp(Timestamp timestamp) {
         if (timestamp == null) return "N/A";
