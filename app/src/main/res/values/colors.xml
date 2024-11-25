@@ -17,6 +17,4 @@
     <color name="bottom_nav_text_color">#FFFFFFFF</color>
     <color name="colorMoneyGreen">#4CAF50</color>
     <color name="colorSeatBlue">#2196F3</color>
-    <color name="colorAccent">#FF4081</color>      <!-- Accent color for "Unblock" -->
-    <color name="colorActive">#6EC531</color>
 </resources>

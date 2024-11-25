@@ -1,7 +1,5 @@
 package com.example.carrentalapp.models;
 
-import com.google.firebase.Timestamp;
-
 public class User {
     protected String uid;
     protected String firstName;
@@ -9,13 +7,11 @@ public class User {
     protected String email;
     protected String phoneNumber;
     protected String role;
-    protected Timestamp createdAt;
-    protected String imgUrl;
-    protected boolean blocked;
+    protected long createdAt; // Timestamp in milliseconds
 
     public User(){}
 
-    public User(String uid, String firstName, String lastName, String email, String phoneNumber, String role, Timestamp createdAt, String imgUrl, boolean blocked) {
+    public User(String uid, String firstName, String lastName, String email, String phoneNumber, String role, long createdAt) {
         this.uid = uid;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -23,8 +19,6 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.role = role;
         this.createdAt = createdAt;
-        this.imgUrl = imgUrl;
-        this.blocked = blocked;
     }
 
     public String getUid() {
@@ -75,15 +69,7 @@ public class User {
         this.role = role;
     }
 
-    public Timestamp getCreatedAt() { return createdAt; }
+    public long getCreatedAt() { return createdAt; }
 
-    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
-
-    public String getImgUrl() {return imgUrl;}
-
-    public void setImgUrl(String imgUrl) {this.imgUrl = imgUrl;}
-
-    public boolean isBlocked() {return blocked;}
-
-    public void setBlocked(boolean blocked) {this.blocked = blocked;}
+    public void setCreatedAt(long createdAt) { this.createdAt = createdAt; }
 }

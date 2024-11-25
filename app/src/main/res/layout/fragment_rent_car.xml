@@ -26,21 +26,6 @@
             android:textStyle="bold"
             android:layout_marginTop="4dp" />
 
-        <!-- Description -->
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
-        <TextView
-            android:id="@+id/carDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="2dp"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
-
         <TextView
             android:id="@+id/carLocation"
             android:layout_width="wrap_content"

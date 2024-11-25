@@ -45,8 +45,4 @@
         <!-- Set default Button style to Rounded -->
         <item name="buttonStyle">@style/Widget.App.Button.Rounded</item>
     </style>
-    <style name="CircularShape">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item> <!-- 50% corner size makes it a circle -->
-    </style>
 </resources>
