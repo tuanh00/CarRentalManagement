@@ -16,9 +16,9 @@
     android:title="View Contracts" />
 
     <item
-        android:id="@+id/navigation_view_users"
-        android:icon="@drawable/ic_view_users"
-        android:title="View Users" />
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_profile"
+    android:title="Profile" />
 
     <item
         android:id="@+id/navigation_sign_out"

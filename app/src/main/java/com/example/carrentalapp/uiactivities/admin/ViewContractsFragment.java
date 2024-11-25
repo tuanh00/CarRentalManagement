@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carrentalapp.R;
-import com.example.carrentalapp.adapters.ContractAdapter;
+import com.example.carrentalapp.common.ContractAdapter;
 import com.example.carrentalapp.models.Contract;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;

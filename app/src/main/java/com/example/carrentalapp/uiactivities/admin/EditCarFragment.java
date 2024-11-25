@@ -27,7 +27,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.carrentalapp.BuildConfig;
 import com.example.carrentalapp.R;
-import com.example.carrentalapp.adapters.ImagePreviewAdapter;
+import com.example.carrentalapp.common.ImagePreviewAdapter;
+import com.example.carrentalapp.models.Car;
 import com.example.carrentalapp.states.car.CarAvailabilityState;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -47,7 +48,7 @@ import java.util.UUID;
 
 public class EditCarFragment extends Fragment {
 
-    private EditText brandEditText, modelEditText, seatsEditText, priceEditText, locationEditText, descriptionEditText;
+    private EditText brandEditText, modelEditText, seatsEditText, priceEditText, locationEditText;
     private SwitchCompat availabilitySwitch;
     private ImageView carImageView;
     private Button buttonEditImages, buttonSaveCarDetails;
@@ -90,7 +91,6 @@ public class EditCarFragment extends Fragment {
         // Bind views
         brandEditText = view.findViewById(R.id.brandEditText);
         modelEditText = view.findViewById(R.id.modelEditText);
-        descriptionEditText = view.findViewById(R.id.descriptionEditText);
         seatsEditText = view.findViewById(R.id.seatsEditText);
         priceEditText = view.findViewById(R.id.priceEditText);
         locationEditText = view.findViewById(R.id.locationEditText);
@@ -123,7 +123,6 @@ public class EditCarFragment extends Fragment {
             carId = bundle.getString("carId", "");
             String carBrand = bundle.getString("carBrand", "");
             String carModel = bundle.getString("carModel", "");
-            String carDescription = bundle.getString("carDescription","");
             int carSeats = bundle.getInt("carSeats", 4);
             double carPrice = bundle.getDouble("carPrice", 0.0);
             String carLocation = bundle.getString("carLocation", "");
@@ -132,7 +131,6 @@ public class EditCarFragment extends Fragment {
             // Populate UI elements with car data
             brandEditText.setText(carBrand);
             modelEditText.setText(carModel);
-            descriptionEditText.setText(carDescription);
             seatsEditText.setText(String.valueOf(carSeats));
             priceEditText.setText(String.valueOf(carPrice));
             locationEditText.setText(carLocation);
@@ -239,7 +237,6 @@ public class EditCarFragment extends Fragment {
     private void saveCarDetails() {
         String brand = brandEditText.getText().toString().trim();
         String model = modelEditText.getText().toString().trim();
-        String description = descriptionEditText.getText().toString().trim();
         String seatsStr = seatsEditText.getText().toString().trim();
         String priceStr = priceEditText.getText().toString().trim();
         String location = locationEditText.getText().toString().trim();
@@ -265,10 +262,10 @@ public class EditCarFragment extends Fragment {
 
         // Start uploading images (if any)
         if (!imageUris.isEmpty()) {
-            uploadImagesAndUpdateCar(brand, model, seats, price, location, availabilityState, description);
+            uploadImagesAndUpdateCar(brand, model, seats, price, location, availabilityState);
         } else {
             // If no images, proceed to update car details with empty imageUrls
-            updateCarInFirestore(brand, model, seats, price, location, availabilityState, new ArrayList<>(), description);
+            updateCarInFirestore(brand, model, seats, price, location, availabilityState, new ArrayList<>());
         }
     }
 
@@ -277,7 +274,7 @@ public class EditCarFragment extends Fragment {
      * Uploads selected images to Firebase Storage and retrieves their URLs.
      */
     private void uploadImagesAndUpdateCar(String brand, String model, int seats, double price,
-                                          String location, CarAvailabilityState isAvailable, String description) {
+                                          String location, CarAvailabilityState isAvailable) {
         ArrayList<String> uploadedImageUrls = new ArrayList<>();
         final int totalImages = imageUris.size();
         final int[] uploadedCount = {0};
@@ -288,7 +285,7 @@ public class EditCarFragment extends Fragment {
                 uploadedImageUrls.add(imageUrl);
                 uploadedCount[0]++;
                 if (uploadedCount[0] == totalImages) {
-                    updateCarInFirestore(brand, model, seats, price, location, isAvailable, uploadedImageUrls, description);
+                    updateCarInFirestore(brand, model, seats, price, location, isAvailable, uploadedImageUrls);
                 }
             } else {
                 String fileName = UUID.randomUUID().toString();
@@ -299,7 +296,7 @@ public class EditCarFragment extends Fragment {
                                     uploadedImageUrls.add(downloadUri.toString());
                                     uploadedCount[0]++;
                                     if (uploadedCount[0] == totalImages) {
-                                        updateCarInFirestore(brand, model, seats, price, location, isAvailable, uploadedImageUrls, description);
+                                        updateCarInFirestore(brand, model, seats, price, location, isAvailable, uploadedImageUrls);
                                     }
                                 }))
                         .addOnFailureListener(e -> {
@@ -313,11 +310,10 @@ public class EditCarFragment extends Fragment {
      * Updates the car details in Firestore, including adding and removing images.
      */
     private void updateCarInFirestore(String brand, String model, int seats, double price,
-                                      String location, CarAvailabilityState availabilityState, ArrayList<String> imageUrls, String description) {
+                                      String location, CarAvailabilityState availabilityState, ArrayList<String> imageUrls) {
         Map<String, Object> carData = new HashMap<>();
         carData.put("brand", brand);
         carData.put("model", model);
-        carData.put("description", description);
         carData.put("seats", seats);
         carData.put("price", price);
         carData.put("location", location);
