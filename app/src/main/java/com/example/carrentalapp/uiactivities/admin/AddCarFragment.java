@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.carrentalapp.R;
-import com.example.carrentalapp.common.ImagePreviewAdapter;
+import com.example.carrentalapp.adapters.ImagePreviewAdapter;
 import com.example.carrentalapp.states.car.CarAvailabilityState;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -49,7 +49,7 @@ public class AddCarFragment extends Fragment {
 
     private static final int AUTOCOMPLETE_REQUEST_CODE = 100;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 101;
-    private EditText inputCarModel, inputCarBrand, inputCarSeats, inputCarLocation, inputCarPrice;
+    private EditText inputCarModel, inputCarBrand, inputCarSeats, inputCarLocation, inputCarPrice, inputCarDescription;
     private ArrayList<Uri> imageUris;
     private FirebaseFirestore db;
     private FirebaseStorage storage;
@@ -96,6 +96,7 @@ public class AddCarFragment extends Fragment {
 
         inputCarModel = view.findViewById(R.id.inputCarModel);
         inputCarBrand = view.findViewById(R.id.inputCarBrand);
+        inputCarDescription = view.findViewById(R.id.inputCarDescription);
         inputCarSeats = view.findViewById(R.id.inputCarSeats);
         inputCarLocation = view.findViewById(R.id.inputCarLocation);
         inputCarPrice = view.findViewById(R.id.inputCarPrice);
@@ -164,6 +165,7 @@ public class AddCarFragment extends Fragment {
     private void uploadCarDetails() {
         String model = inputCarModel.getText().toString().trim();
         String brand = inputCarBrand.getText().toString().trim();
+        String description = inputCarDescription.getText().toString().trim();
         int seats = Integer.parseInt(inputCarSeats.getText().toString().trim());
         double price = Double.parseDouble(inputCarPrice.getText().toString().trim());
         String location = inputCarLocation.getText().toString().trim();
@@ -174,17 +176,17 @@ public class AddCarFragment extends Fragment {
         }
 
         if (!imageUris.isEmpty()) {
-            uploadImages(model, brand, seats, price, location);
+            uploadImages(model, brand, seats, price, location, description);
         } else {
             ArrayList<String> imageUrls = new ArrayList<>();
-            saveCarToDatabase(model, brand, seats, price, location, imageUrls);
+            saveCarToDatabase(model, brand, seats, price, location, imageUrls, description);
         }
     }
 
     /**
      * Uploads selected images to Firebase Storage and retrieves their URLs.
      */
-    private void uploadImages(String model, String brand, int seats, double price, String location) {
+    private void uploadImages(String model, String brand, int seats, double price, String location, String description) {
         ArrayList<String> imageUrls = new ArrayList<>();
         final int totalImages = imageUris.size();
         final int[] uploadedImages = {0};
@@ -198,7 +200,7 @@ public class AddCarFragment extends Fragment {
                                 imageUrls.add(downloadUri.toString());
                                 uploadedImages[0]++;
                                 if (uploadedImages[0] == totalImages) {
-                                    saveCarToDatabase(model, brand, seats, price, location, imageUrls);
+                                    saveCarToDatabase(model, brand, seats, price, location, imageUrls, description);
                                 }
                             }))
                     .addOnFailureListener(e -> {
@@ -210,10 +212,11 @@ public class AddCarFragment extends Fragment {
     /**
      * Saves car details to Firestore with generated ID and state.
      */
-    private void saveCarToDatabase(String model, String brand, int seats, double price, String location, ArrayList<String> images) {
+    private void saveCarToDatabase(String model, String brand, int seats, double price, String location, ArrayList<String> images, String description) {
         Map<String, Object> carData = new HashMap<>();
         carData.put("model", model);
         carData.put("brand", brand);
+        carData.put("description", description);
         carData.put("seats", seats);
         carData.put("price", price);
         carData.put("location", location);

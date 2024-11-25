@@ -38,6 +38,18 @@
             android:layout_marginBottom="8dp"/>
 
         <EditText
+            android:id="@+id/inputCarDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Car Description"
+            android:layout_marginBottom="8dp"
+            android:padding="12dp"
+            android:gravity="top|start"
+            android:paddingStart="2dp"
+            android:inputType="textMultiLine"
+            android:scrollbars="vertical"/>
+
+        <EditText
             android:id="@+id/inputCarSeats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

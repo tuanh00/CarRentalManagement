@@ -21,6 +21,11 @@ public class Car {
     private Timestamp updatedAt;
     @PropertyName("state")
     private CarAvailabilityState currentState;
+    private String description;
+
+
+
+    private String description;
 
     // Deprecated fields
     @Deprecated
@@ -138,7 +143,8 @@ public class Car {
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
-
+    public String getDescription() {return description;}
+    public void setDescription(String description) {this.description = description;}
     // Deprecated getters and setters
     @Deprecated
     public double getLatitude() { return latitude; }
@@ -149,4 +155,12 @@ public class Car {
     public double getLongitude() { return longitude; }
     @Deprecated
     public void setLongitude(double longitude) { this.longitude = longitude; }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

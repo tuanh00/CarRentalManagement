@@ -16,6 +16,7 @@ import com.example.carrentalapp.builders.IUserBuilder;
 import com.example.carrentalapp.builders.UserEngineer;
 import com.example.carrentalapp.R;
 import com.example.carrentalapp.models.User;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -108,6 +109,9 @@ public class RegisterActivity extends AppCompatActivity {
                         userBuilder.setPhoneNumber(phoneNumber);
                         ((CustomerBuilder) userBuilder).setDriverLicenseId(driverLicenseId);
                         userBuilder.setRole();
+                        userBuilder.setImgUrl(null);
+                        userBuilder.setBlocked(false);
+                        userBuilder.setCreatedAt(Timestamp.now());
 
                         UserEngineer userEngineer = new UserEngineer(userBuilder);
                         userEngineer.constructUser();

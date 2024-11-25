@@ -1,6 +1,7 @@
 package com.example.carrentalapp.builders;
 
 import com.example.carrentalapp.models.User;
+import com.google.firebase.Timestamp;
 
 public interface IUserBuilder {
     void setUid(String uid);
@@ -9,6 +10,9 @@ public interface IUserBuilder {
     void setEmail(String email);
     void setPhoneNumber(String phoneNumber);
     void setRole();
+    void setImgUrl(String imgUrl);
+    void setBlocked(boolean blocked);
+    void setCreatedAt(Timestamp createdAt);
     User build();
 
 }

@@ -1,11 +1,13 @@
 package com.example.carrentalapp.models;
 
+import com.google.firebase.Timestamp;
+
 public class CustomerUser extends User{
     private String driverLicenseId;
     private  int points;
     public CustomerUser(){}
-    public CustomerUser(String uid, String firstName, String lastName, String email, String phoneNumber, String driverLicenseId, int points) {
-        super(uid, firstName, lastName, email, phoneNumber, "customer", System.currentTimeMillis());
+    public CustomerUser(String uid, String firstName, String lastName, String email, String phoneNumber, String driverLicenseId, int points, String imgUrl, boolean blocked, Timestamp createdAt) {
+        super(uid, firstName, lastName, email, phoneNumber, "customer", createdAt, imgUrl, blocked);
         this.driverLicenseId = driverLicenseId;
         this.points = points;
     }

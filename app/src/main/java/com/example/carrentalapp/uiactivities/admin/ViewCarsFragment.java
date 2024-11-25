@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.carrentalapp.R;
-import com.example.carrentalapp.common.CarAdapter;
+import com.example.carrentalapp.adapters.CarAdapter;
 import com.example.carrentalapp.models.Car;
 import com.example.carrentalapp.states.car.CarAvailabilityState;
 import com.google.firebase.firestore.DocumentSnapshot;

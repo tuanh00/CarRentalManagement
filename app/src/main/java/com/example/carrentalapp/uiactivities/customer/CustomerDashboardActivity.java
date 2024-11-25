@@ -7,14 +7,11 @@ import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.carrentalapp.BuildConfig;
 import com.example.carrentalapp.R;
-import com.example.carrentalapp.common.ProfileFragment;
 import com.example.carrentalapp.uiactivities.admin.ViewContractsFragment;
-import com.example.carrentalapp.uiactivities.customer.ViewAvailableCarFragment;
 import com.example.carrentalapp.utilities.SignOutActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;

@@ -1,9 +1,7 @@
-package com.example.carrentalapp.common;
+package com.example.carrentalapp.adapters;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,19 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.carrentalapp.R;
-import com.example.carrentalapp.models.Contract;
 import com.example.carrentalapp.states.car.CarAvailabilityState;
 import com.example.carrentalapp.uiactivities.admin.EditCarFragment;
 import com.example.carrentalapp.models.Car;
 import com.example.carrentalapp.uiactivities.customer.RentCarFragment;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
@@ -104,6 +96,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
                 bundleEdit.putDouble("carPrice", car.getPrice());
                 bundleEdit.putStringArrayList("carImageUrls", new ArrayList<>(car.getImages()));
                 bundleEdit.putString("state", car.getCurrentState().toString());
+                bundleEdit.putString("carDescription", car.getDescription());
 
                 editCarFragment.setArguments(bundleEdit);
 
@@ -124,6 +117,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
                     bundle.putDouble("carPrice", car.getPrice());
                     bundle.putFloat("carRating", car.getRating());
                     bundle.putStringArrayList("carImageUrls", new ArrayList<>(car.getImages()));
+                    bundle.putString("carDescription", car.getDescription());
 
                     rentCarFragment.setArguments(bundle);
 
@@ -155,6 +149,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
         public CarViewHolder(@NonNull View itemView) {
             super(itemView);
+
             carBrandModel = itemView.findViewById(R.id.carBrandModel);
             carLocation = itemView.findViewById(R.id.carLocation);
             carPrice = itemView.findViewById(R.id.carPrice);

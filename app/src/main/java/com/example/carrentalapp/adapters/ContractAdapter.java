@@ -1,9 +1,8 @@
-package com.example.carrentalapp.common;
+package com.example.carrentalapp.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -206,9 +205,6 @@ public class ContractAdapter extends RecyclerView.Adapter<ContractAdapter.Contra
 
     /**
      * Formats Firebase Timestamp to a readable date string.
-     *
-     * @param timestamp The Firebase Timestamp.
-     * @return Formatted date string.
      */
     private String formatTimestamp(Timestamp timestamp) {
         if (timestamp == null) return "N/A";
