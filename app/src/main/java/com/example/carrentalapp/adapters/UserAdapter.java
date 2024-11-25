@@ -59,8 +59,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
             Glide.with(context)
                     .load(profileImageUrl)
-                    .placeholder(R.drawable.ic_user_avatar_placeholder) // Ensure this drawable exists
-                    .error(R.drawable.ic_user_avatar_placeholder)       // Fallback in case of error
+                    .placeholder(R.drawable.ic_user_avatar_placeholder)
+                    .error(R.drawable.ic_user_avatar_placeholder)
                     .into(holder.imageViewAvatar);
         } else {
             holder.imageViewAvatar.setImageResource(R.drawable.ic_user_avatar_placeholder);

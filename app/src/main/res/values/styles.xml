@@ -1,4 +1,3 @@
-<!-- res/values/styles.xml -->
 <resources>
 
     <!-- Toolbar Title Text Appearance -->
@@ -19,18 +18,16 @@
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance.App.Button</item>
         <item name="backgroundTint">@color/primaryColor</item>
         <item name="android:textColor">@android:color/white</item>
-        <!-- Removed android:layout_height to prevent inconsistent sizing -->
     </style>
 
     <!-- Shape Appearance for Rounded Buttons -->
     <style name="ShapeAppearance.App.Button" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">16dp</item> <!-- Adjust to desired roundness -->
+        <item name="cornerSize">16dp</item>
     </style>
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.CarRentalApp">
-        <!-- Primary color -->
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
         <item name="colorOnPrimary">@android:color/white</item>
@@ -47,6 +44,6 @@
     </style>
     <style name="CircularShape">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item> <!-- 50% corner size makes it a circle -->
+        <item name="cornerSize">50%</item>
     </style>
 </resources>

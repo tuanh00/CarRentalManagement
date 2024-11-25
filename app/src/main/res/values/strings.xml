@@ -5,7 +5,7 @@
     <string name="seat_icon_description">Seat Icon</string>
     <string name="price_icon_description">Price Icon</string>
     <string name="user_avatar">User Avatar</string>
-    <string name="stripe_secret_key">sk_test_51QHBq6P4a6KosqaCDLDFkthYaKBjf8YEF2JC81wdvmh5ULge8IrQ0JIx8iSI0F9wXsJfu9WQuw8dGlQj1voZXNfP00qjzgx6qU</string>
+<!--    <string name="stripe_secret_key">sk_test_51QHBq6P4a6KosqaCDLDFkthYaKBjf8YEF2JC81wdvmh5ULge8IrQ0JIx8iSI0F9wXsJfu9WQuw8dGlQj1voZXNfP00qjzgx6qU</string>-->
 </resources>
 
 
