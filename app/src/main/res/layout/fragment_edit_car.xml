@@ -59,6 +59,29 @@
             android:background="@color/cardview_shadow_end_color"
             android:padding="12dp" />
 
+        <!-- Description Input -->
+        <TextView
+            android:id="@+id/textViewDescriptionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/descriptionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter car description"
+            android:gravity="top|start"
+            android:background="@color/cardview_shadow_end_color"
+            android:padding="12dp"
+            android:scrollbars="vertical"
+            android:overScrollMode="ifContentScrolls"
+            android:paddingStart="2dp"
+            android:inputType="textMultiLine" />
+
         <!-- Model Input -->
         <TextView
             android:id="@+id/textViewModelLabel"

@@ -265,7 +265,7 @@ public class EditCarFragment extends Fragment {
 
         // Start uploading images (if any)
         if (!imageUris.isEmpty()) {
-            uploadImagesAndUpdateCar(brand, model, seats, price, location, availabilityState,description);
+            uploadImagesAndUpdateCar(brand, model, seats, price, location, availabilityState, description);
         } else {
             // If no images, proceed to update car details with empty imageUrls
             updateCarInFirestore(brand, model, seats, price, location, availabilityState, new ArrayList<>(), description);

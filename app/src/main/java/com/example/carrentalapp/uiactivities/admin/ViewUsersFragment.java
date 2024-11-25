@@ -64,7 +64,7 @@ public class ViewUsersFragment extends Fragment {
                     userList.clear();
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         User user = document.toObject(User.class);
-                        user.setUid(document.getId()); // Ensure UID is correctly set
+                        user.setUid(document.getId());
                         userList.add(user);
                     }
                     userAdapter.notifyDataSetChanged();
