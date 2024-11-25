@@ -103,7 +103,6 @@
                 android:textColor="@color/black" />
         </LinearLayout>
 
-
         <RatingBar
             android:id="@+id/carRating"
             android:layout_width="wrap_content"
@@ -122,8 +121,6 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray" />
-
-
     </LinearLayout>
 
     <Button

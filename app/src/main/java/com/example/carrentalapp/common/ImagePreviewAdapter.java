@@ -1,4 +1,4 @@
-package com.example.carrentalapp.adapters;
+package com.example.carrentalapp.common;
 
 import android.content.Context;
 import android.net.Uri;
