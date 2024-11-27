@@ -80,7 +80,7 @@ public class EditContractFragment extends Fragment {
             Timestamp startDate = bundle.getParcelable("startDate");
             Timestamp endDate = bundle.getParcelable("endDate");
             Timestamp createdAt = bundle.getParcelable("createdAt");
-            Timestamp updatedAt = bundle.getParcelable("updatedAt");
+            Timestamp updateDate = bundle.getParcelable("updateDate");
             totalPayment = bundle.getDouble("totalPayment", 0.0);
             String statusString = bundle.getString("status", "N/A");
             try {
@@ -97,7 +97,7 @@ public class EditContractFragment extends Fragment {
             startDateTextView.setText(formatTimestamp(startDate));
             endDateTextView.setText(formatTimestamp(endDate)); // Display end date
             createdAtTextView.setText(formatTimestamp(createdAt));
-            updatedAtTextView.setText(formatTimestamp(updatedAt));
+            updatedAtTextView.setText(formatTimestamp(updateDate));
             totalPaymentTextView.setText("$" + totalPayment);
             statusTextView.setText(currentStatus.toString());
 
@@ -171,7 +171,7 @@ public class EditContractFragment extends Fragment {
 
         Map<String, Object> updates = new HashMap<>();
         updates.put("status", newStatus.toString());
-        updates.put("updatedAt", FieldValue.serverTimestamp());
+        updates.put("updateDate", FieldValue.serverTimestamp());
 
         // Query Firestore to find the document ID by eventId
         db.collection("Contracts")
