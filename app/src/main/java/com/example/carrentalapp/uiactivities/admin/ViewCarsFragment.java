@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.example.carrentalapp.R;
 import com.example.carrentalapp.adapters.CarAdapter;
 import com.example.carrentalapp.models.Car;
 import com.example.carrentalapp.states.car.CarAvailabilityState;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -29,12 +32,13 @@ import java.util.ArrayList;
 public class ViewCarsFragment extends Fragment {
 
     private RecyclerView recyclerView;
+    private TextInputEditText searchBar;
     private CarAdapter carAdapter;
     private ArrayList<Car> carList;
     private FirebaseFirestore db;
     private static final String PREFS_NAME = "CarRentalAppPrefs";
     private static final String ROLE_KEY = "user_role";
-    private ListenerRegistration carListener; // Listen to the latest added car
+    private ListenerRegistration carListener;
 
     public ViewCarsFragment() {
         // Required empty public constructor
@@ -53,6 +57,24 @@ public class ViewCarsFragment extends Fragment {
         carList = new ArrayList<>();
         carAdapter = new CarAdapter(getContext(), carList, true);
         recyclerView.setAdapter(carAdapter);
+        searchBar = view.findViewById(R.id.searchBar);
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // No action needed
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterCars(s.toString().toLowerCase());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // No action needed
+            }
+        });
 
         loadCars();
 
@@ -68,6 +90,22 @@ public class ViewCarsFragment extends Fragment {
             carListener = null;
         }
     }
+
+    private void filterCars(String searchText) {
+        ArrayList<Car> filteredCars = new ArrayList<>();
+        for (Car car : carList) {
+            if (car.getBrand().toLowerCase().contains(searchText) ||
+                    car.getModel().toLowerCase().contains(searchText) ||
+                    String.valueOf(car.getSeats()).contains(searchText) ||
+                    String.valueOf(car.getPrice()).contains(searchText) ||
+                    String.valueOf(car.getRating()).contains(searchText)) {
+
+                filteredCars.add(car);
+            }
+        }
+        carAdapter.updateData(filteredCars);
+    }
+
     private boolean isAdminUser() {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return "admin".equals(sharedPreferences.getString(ROLE_KEY, "customer"));
@@ -82,20 +120,11 @@ public class ViewCarsFragment extends Fragment {
             carListener.remove();
         }
 
-        Query query = db.collection("Cars");
-
-        if (!isAdminUser()) {
-            // If not admin, only show available cars
-            query = query.whereEqualTo("state", CarAvailabilityState.AVAILABLE.name());
-        }
-
-        // Order the cars by createdAt in descending order
-        query = query.orderBy("createdAt", Query.Direction.DESCENDING);
+        Query query = db.collection("Cars").orderBy("createdAt", Query.Direction.DESCENDING);
 
         carListener = query.addSnapshotListener((queryDocumentSnapshots, e) -> {
             if (e != null) {
                 Toast.makeText(getContext(), "Failed to load cars", Toast.LENGTH_SHORT).show();
-                Log.e("FirebaseError", "Error loading cars", e);
                 return;
             }
 
@@ -104,15 +133,6 @@ public class ViewCarsFragment extends Fragment {
                 for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                     Car car = document.toObject(Car.class);
                     car.setId(document.getId());
-
-                    // Retrieve and set the availability state based on the stored value
-                    String state = document.getString("state");
-                    if (state != null) {
-                        car.setCurrentState(CarAvailabilityState.valueOf(state.toUpperCase()));
-                    } else {
-                        car.setCurrentState(CarAvailabilityState.UNAVAILABLE); // Default if not set
-                    }
-
                     carList.add(car);
                 }
                 carAdapter.notifyDataSetChanged();
