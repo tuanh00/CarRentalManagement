@@ -11,15 +11,29 @@
         android:padding="16dp"
         android:layout_gravity="center_vertical">
 
+
         <!-- App Logo at the top -->
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/logocar2"
             android:contentDescription="App Logo"
             android:layout_marginBottom="24dp" />
+
+        <!-- App Title -->
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:textColor="@color/primaryColor"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp" />
+
 
         <!-- First Name Input Field -->
         <EditText
@@ -95,14 +109,15 @@
             android:textColor="@color/textColor"
             android:layout_marginTop="12dp" />
 
-        <!-- Login Button -->
-        <Button
+        <!-- Login Link -->
+        <TextView
             android:id="@+id/loginLink"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login"
-            android:backgroundTint="@color/secondaryColor"
-            android:textColor="@color/textColor"
-            android:layout_marginTop="12dp" />
+            android:text="Already have an account? Login"
+            android:textColor="@color/secondaryDarkColor"
+            android:layout_gravity="end"
+            android:layout_marginTop="16dp"
+            android:textSize="14sp" />
     </LinearLayout>
 </FrameLayout>

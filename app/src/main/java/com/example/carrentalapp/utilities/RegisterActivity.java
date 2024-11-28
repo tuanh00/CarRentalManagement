@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +30,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText firstNameEditText, lastNameEditText, dobEditText, phoneNumberEditText, driverLicenseIdEditText,
             emailEditText, passwordEditText, confirmPasswordEditText;
-    private Button registerButton, loginLink;
+    private Button registerButton;
+    private TextView loginLink;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private static final String CANADIAN_PHONE_PATTERN = "^(\\+1[-.\\s]?)?\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}$";
