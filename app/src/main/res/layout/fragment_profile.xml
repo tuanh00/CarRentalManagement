@@ -53,7 +53,7 @@
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp"
             android:background="@color/white"
-            app:cardBackgroundColor="#F5F5F5">
+            app:cardBackgroundColor="@color/colorProfileCardBackground">
 
             <LinearLayout
                 android:layout_width="match_parent"
