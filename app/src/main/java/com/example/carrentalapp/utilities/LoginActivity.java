@@ -11,6 +11,7 @@ import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -73,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.emailLogin);
         passwordEditText = findViewById(R.id.passwordLogin);
         Button loginButton = findViewById(R.id.loginbtn);
-        Button registerLink = findViewById(R.id.registerLink);
+        TextView registerLink = findViewById(R.id.registerLink);
         Button googleSignButton = findViewById(R.id.googleSignInButton);
 
         registerLink.setOnClickListener(v -> {
@@ -177,37 +178,6 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> Log.e("LoginActivity", "Error saving user data", e));
     }
 
-
-    private void handleExistingUser(FirebaseUser firebaseUser, String role, Boolean isBlocked) {
-        if (isBlocked != null && isBlocked) {
-            Toast.makeText(this, "Your account is blocked. Contact support.", Toast.LENGTH_LONG).show();
-            mAuth.signOut();
-            return;
-        }
-
-        User existingUser = UserFactory.createUser(
-                role,
-                firebaseUser.getUid(),
-                firebaseUser.getDisplayName() != null ? firebaseUser.getDisplayName().split(" ")[0] : "",
-                firebaseUser.getDisplayName() != null ? firebaseUser.getDisplayName().split(" ")[1] : "",
-                firebaseUser.getEmail(),
-                null, // No phone number
-                null, // No driver license ID
-                Timestamp.now(),
-                Uri.parse("android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.drawable.ic_user_avatar_placeholder).toString()
-        );
-
-        // Extract fields and save to preferences
-        saveUserToPreferences(
-                existingUser.getUid(),
-                existingUser.getEmail(),
-                existingUser.getRole(),
-                existingUser.getFirstName(),
-                existingUser.getLastName()
-        );
-
-        navigateToDashboard(role);
-    }
 
     private void saveUserToPreferences(String userId, String email, String role, String firstName, String lastName) {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
