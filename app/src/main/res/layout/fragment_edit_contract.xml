@@ -18,7 +18,7 @@
             android:id="@+id/textViewEditContractTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Contract"
+            android:text="Edit Contract Details"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginBottom="16dp"

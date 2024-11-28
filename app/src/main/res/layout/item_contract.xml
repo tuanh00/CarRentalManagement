@@ -11,22 +11,21 @@
 
     <!-- Contract Details -->
     <TextView
-        android:id="@+id/textViewUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="User: "
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="@color/black"/>
-
-    <TextView
         android:id="@+id/textViewUserAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Email: "
         android:layout_marginBottom="4dp"
-        android:textStyle="italic"
+        android:textStyle="bold"
         android:textSize="14sp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/textViewUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User: "
+        android:textSize="16sp"
         android:textColor="@color/black"/>
 
     <TextView

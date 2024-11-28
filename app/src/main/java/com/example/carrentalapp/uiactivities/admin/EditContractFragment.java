@@ -29,13 +29,13 @@ import java.util.Map;
 
 public class EditContractFragment extends Fragment {
 
-    private TextView eventIdTextView, userFullNameTextView, userEmailTextView, carIdTextView,
+    private TextView contractIdTextView, userFullNameTextView, userEmailTextView, carIdTextView,
             startDateTextView, endDateTextView, totalPaymentTextView, statusTextView, createdAtTextView,
             updatedAtTextView, toggleStatusLabel;
     private SwitchCompat statusSwitch;
     private Button buttonUpdateStatus;
     private FirebaseFirestore db;
-    private String eventId;
+    private String contractId;
     private ContractState currentStatus, newStatus;
     private double totalPayment;
 
@@ -56,7 +56,7 @@ public class EditContractFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Initialize UI components
-        eventIdTextView = view.findViewById(R.id.textViewContractId);
+        contractIdTextView = view.findViewById(R.id.textViewContractId);
         userFullNameTextView = view.findViewById(R.id.textViewUserFullName);
         userEmailTextView = view.findViewById(R.id.textViewUserEmail);
         carIdTextView = view.findViewById(R.id.textViewCarId);
@@ -73,7 +73,7 @@ public class EditContractFragment extends Fragment {
         // Retrieve contract data from arguments
         Bundle bundle = getArguments();
         if (bundle != null) {
-            eventId = bundle.getString("eventId", "N/A");
+            contractId = bundle.getString("contractId", "N/A");
             String userFullName = bundle.getString("fullName", "N/A");
             String userEmail = bundle.getString("email", "N/A");
             String carId = bundle.getString("carId", "N/A");
@@ -90,7 +90,7 @@ public class EditContractFragment extends Fragment {
             }
 
             // Set UI with values
-            eventIdTextView.setText(eventId);
+            contractIdTextView.setText(contractId);
             userFullNameTextView.setText(userFullName);
             userEmailTextView.setText(userEmail);
             carIdTextView.setText(carId);
@@ -143,8 +143,8 @@ public class EditContractFragment extends Fragment {
      * Updates the contract status in Firestore.
      */
     private void updateContractStatus() {
-        if (TextUtils.isEmpty(eventId) || "N/A".equals(eventId)) {
-            Toast.makeText(getContext(), "Invalid event ID", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(contractId) || "N/A".equals(contractId)) {
+            Toast.makeText(getContext(), "Invalid Contract ID", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -173,35 +173,19 @@ public class EditContractFragment extends Fragment {
         updates.put("status", newStatus.toString());
         updates.put("updateDate", FieldValue.serverTimestamp());
 
-        // Query Firestore to find the document ID by eventId
-        db.collection("Contracts")
-                .whereEqualTo("eventId", eventId)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        // Get the first document that matches the eventId
-                        String documentId = queryDocumentSnapshots.getDocuments().get(0).getId();
+        // Directly update the document using the contractId
+        db.collection("Contracts").document(contractId).update(updates)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getContext(), "Contract status updated to " + newStatus, Toast.LENGTH_SHORT).show();
 
-                        // Now update the document using the documentId
-                        db.collection("Contracts").document(documentId).update(updates)
-                                .addOnSuccessListener(aVoid -> {
-                                    Toast.makeText(getContext(), "Contract status updated to " + newStatus, Toast.LENGTH_SHORT).show();
+                    // Notify the ViewContractsFragment of the update
+                    getParentFragmentManager().setFragmentResult("contractUpdated", new Bundle());
 
-                                    // Set a result to notify ViewContractsFragment of the update
-                                    getParentFragmentManager().setFragmentResult("contractUpdated", new Bundle());
-
-                                    // Navigate back to the ViewContractsFragment
-                                    navigateToViewContractFragment();
-                                })
-                                .addOnFailureListener(e -> {
-                                    Toast.makeText(getContext(), "Failed to update contract: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                });
-                    } else {
-                        Toast.makeText(getContext(), "No contract found for event ID: " + eventId, Toast.LENGTH_SHORT).show();
-                    }
+                    // Navigate back to the ViewContractsFragment
+                    navigateToViewContractFragment();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Error finding contract by event ID: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Failed to update contract: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 

@@ -20,7 +20,7 @@ import java.util.Locale;
 
 public class ViewContractDetailsFragment extends Fragment {
 
-    private TextView eventIdTextView, userFullNameTextView, userEmailTextView, carIdTextView, startDateTextView, endDateTextView, totalPaymentTextView, statusTextView, createdAtTextView;
+    private TextView contractIdTextView, eventIdTextView, userFullNameTextView, userEmailTextView, carIdTextView, startDateTextView, endDateTextView, totalPaymentTextView, statusTextView, createdAtTextView;
     private String contractId;
     private double totalPayment;
 
@@ -33,7 +33,8 @@ public class ViewContractDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        eventIdTextView = view.findViewById(R.id.textViewContractId);
+        contractIdTextView = view.findViewById(R.id.textViewContractId);
+        eventIdTextView = view.findViewById(R.id.textViewEventId);
         userFullNameTextView = view.findViewById(R.id.textViewUserFullName);
         userEmailTextView = view.findViewById(R.id.textViewUserEmail);
         carIdTextView = view.findViewById(R.id.textViewCarId);
@@ -46,7 +47,8 @@ public class ViewContractDetailsFragment extends Fragment {
         // Retrieve contract data from arguments
         Bundle bundle = getArguments();
         if (bundle != null) {
-            contractId = bundle.getString("eventId", "N/A");
+            contractId = bundle.getString("contractId", "N/A");
+            String eventId =  bundle.getString("eventId", "N/A");
             String userFullName = bundle.getString("fullName", "N/A");
             String userEmail = bundle.getString("email", "N/A");
             String carId = bundle.getString("carId", "N/A");
@@ -57,7 +59,8 @@ public class ViewContractDetailsFragment extends Fragment {
             String status = bundle.getString("status", "N/A");
 
             // Set UI with values
-            eventIdTextView.setText(contractId);
+            contractIdTextView.setText(contractId);
+            eventIdTextView.setText(eventId);
             userFullNameTextView.setText(userFullName);
             userEmailTextView.setText(userEmail);
             carIdTextView.setText(carId);

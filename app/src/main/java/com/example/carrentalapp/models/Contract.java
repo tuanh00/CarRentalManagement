@@ -47,9 +47,12 @@ public class Contract {
 
     public Timestamp getEndDate() { return endDate; }
 
+    @PropertyName("updateDate")
+
     public Timestamp getUpdatedAt() {
         return updatedAt;
     }
+    @PropertyName("updateDate")
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;

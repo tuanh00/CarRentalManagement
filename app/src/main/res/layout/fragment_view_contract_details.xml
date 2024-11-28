@@ -11,7 +11,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Contract ID (Hidden or Displayed for reference) -->
+        <!-- Fragment Title -->
+        <TextView
+            android:id="@+id/textViewViewContractsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contract Details"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/black" />
+
+        <!-- Contract ID -->
         <TextView
             android:id="@+id/textViewContractIdLabel"
             android:layout_width="wrap_content"
@@ -22,6 +33,23 @@
 
         <TextView
             android:id="@+id/textViewContractId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="N/A"
+            android:textSize="16sp" />
+
+        <!-- Event ID -->
+        <TextView
+            android:id="@+id/textViewEventIdLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event ID:"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/textViewEventId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="N/A"

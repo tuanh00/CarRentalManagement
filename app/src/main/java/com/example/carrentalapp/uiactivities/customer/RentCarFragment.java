@@ -182,28 +182,28 @@ public class RentCarFragment extends Fragment {
 
         Log.d("RentCarFragment", "Renting car with ID: " + carId);
         fetchPaymentSheetConfig();
-
     }
 
     private void createEventAndSaveContract(Date startDate, Date endDate) {
+        //Check if calendarHelper is initialized
+        if(calendarHelper == null) {
+            Log.w("RentCarFragment", "No Google Calendar account detected. Skipping event creation.");
+            saveContractToFirestore(null, startDate, endDate); // Proceed without calendar event
+            return;
+        }
         new Thread(() -> {
-            eventId = "failed_event";
             try {
                 eventId = calendarHelper.createEvent("Rent Car ID: " + carId, startDate, endDate);
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        Toast.makeText(getContext(), "Calendar event created successfully!", Toast.LENGTH_SHORT).show();
-                        saveContractToFirestore(eventId, startDate, endDate);
-                    });
-                }
+                Log.d("RentCarFragment", "Calendar event created successfully with ID: " + eventId);
             } catch (Exception e) {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(() ->
-                            Toast.makeText(getContext(), "Failed to create calendar event: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                    );
-                }
+                Log.e("RentCarFragment", "Failed to create calendar event: " + e.getMessage());
+                eventId = null; // Null event ID indicates calendar event creation failed
             }
 
+            //Proceed with saving the contract regardless of event creation success
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> saveContractToFirestore(eventId, startDate, endDate));
+            }
         }).start();
     }
 
@@ -215,7 +215,7 @@ public class RentCarFragment extends Fragment {
         }
 
         String userId = currentUser.getUid();
-        totalPayment = pricePerDay * ((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+        //totalPayment = pricePerDay * ((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
 
         Map<String, Object> contractData = new HashMap<>();
         contractData.put("userId", userId);
@@ -297,6 +297,7 @@ public class RentCarFragment extends Fragment {
             calendarHelper = new GoogleCalendarHelper(credential);
             Log.d("RentCarFragment", "Google Calendar credential initialized with account: " + accountName);
         } else {
+            calendarHelper = null; // No calendar available
             Log.e("RentCarFragment", "Google account name is missing; cannot initialize Google Calendar.");
             Toast.makeText(getContext(), "Google Calendar setup failed. Please re-login.", Toast.LENGTH_SHORT).show();
         }

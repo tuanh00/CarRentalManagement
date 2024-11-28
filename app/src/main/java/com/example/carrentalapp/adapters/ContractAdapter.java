@@ -67,10 +67,13 @@ public class ContractAdapter extends RecyclerView.Adapter<ContractAdapter.Contra
     @Override
     public void onBindViewHolder(@NonNull ContractViewHolder holder, int position) {
         Contract contract = contractList.get(position);
+        // Fetch the Firestore documentId for this contract
+        String contractId = contract.getId();
 
         if ("admin".equals(role)) {
+            //Admin side
             // Fetch user data from Firestore based on userId in contract
-            String userId = contract.getUserId();
+            //String userId = contract.getUserId();
 
             holder.viewDetailsButton.setVisibility(View.GONE);
             holder.editContractButton.setVisibility(View.VISIBLE);
@@ -79,7 +82,7 @@ public class ContractAdapter extends RecyclerView.Adapter<ContractAdapter.Contra
             holder.userAccountTextView.setText("Email: Loading...");
             holder.userNameTextView.setText("User: Loading...");
 
-            getUserData(userId, user -> {
+            getUserData(contract.getUserId(), user -> {
                 if (user != null) {
                     holder.userAccountTextView.setText("Email: " + user.getEmail());
                     holder.userNameTextView.setText("User: " + user.getFirstName() + " " + user.getLastName());
@@ -90,20 +93,18 @@ public class ContractAdapter extends RecyclerView.Adapter<ContractAdapter.Contra
                         EditContractFragment editFragment = new EditContractFragment();
 
                         // Pass the contract data through the bundle, including fullName and email
-                        Bundle bundle = createContractBundle(contract);
-                        String fullName = (user.getFirstName() != null ? user.getFirstName() : "") + " " +
-                                (user.getLastName() != null ? user.getLastName() : "");
-                        bundle.putString("fullName", fullName.trim());
+                        Bundle bundle = createContractBundle(contract, contractId);
+                        bundle.putString("fullName", user.getFirstName() + " " + user.getLastName());
                         bundle.putString("email", user.getEmail());
 
                         editFragment.setArguments(bundle);
-
                         fragmentActivity.getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.adminFragmentContainer, editFragment)
                                 .addToBackStack(null)
                                 .commit();
                     });
                 } else {
+                    //Customer Side
                     holder.userAccountTextView.setText("Email: N/A");
                     holder.userNameTextView.setText("User: N/A");
 
@@ -126,14 +127,11 @@ public class ContractAdapter extends RecyclerView.Adapter<ContractAdapter.Contra
                 ViewContractDetailsFragment detailsFragment = new ViewContractDetailsFragment();
 
                 // Pass the contract data through the bundle, including fullName and email
-                Bundle bundle = createContractBundle(contract);
-                String fullName = (loggedInFirstName != null ? loggedInFirstName : "") + " " +
-                        (loggedInLastName != null ? loggedInLastName : "");
-                bundle.putString("fullName", fullName.trim());
+                Bundle bundle = createContractBundle(contract, contractId);
+                bundle.putString("fullName", loggedInFirstName + " " + loggedInLastName);
                 bundle.putString("email", loggedInEmail);
 
                 detailsFragment.setArguments(bundle);
-
                 fragmentActivity.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.customerFragmentContainer, detailsFragment)
                         .addToBackStack(null)
@@ -189,15 +187,16 @@ public class ContractAdapter extends RecyclerView.Adapter<ContractAdapter.Contra
         void onUserFetched(User user);
     }
 
-    private Bundle createContractBundle(Contract contract) {
+    private Bundle createContractBundle(Contract contract, String contractId) {
         Bundle bundle = new Bundle();
-        bundle.putString("eventId", contract.getEventId());
+        bundle.putString("contractId", contractId);
+        bundle.putString("eventId", contract.getEventId() != null ? contract.getEventId() : "N/A");
         bundle.putString("userId", contract.getUserId());
         bundle.putString("carId", contract.getCarId());
-        bundle.putParcelable("startDate", contract.getStartDate()); // Pass Timestamp directly
+        bundle.putParcelable("startDate", contract.getStartDate());
         bundle.putParcelable("endDate", contract.getEndDate());
         bundle.putParcelable("createdAt", contract.getCreatedAt());
-        bundle.putParcelable("updatedAt", contract.getUpdatedAt());
+        bundle.putParcelable("updateDate", contract.getUpdatedAt());
         bundle.putDouble("totalPayment", contract.getTotalPayment());
         bundle.putString("status", contract.getState().toString());
         return bundle;
