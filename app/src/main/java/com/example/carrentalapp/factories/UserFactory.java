@@ -5,9 +5,10 @@ import com.example.carrentalapp.builders.CustomerBuilder;
 import com.example.carrentalapp.builders.IUserBuilder;
 import com.example.carrentalapp.builders.UserEngineer;
 import com.example.carrentalapp.models.User;
+import com.google.firebase.Timestamp;
 
 public class UserFactory {
-    public static User createUser(String role, String uid, String firstName, String lastName, String email, String phoneNumber, String driverLicenseId) {
+    public static User createUser(String role, String uid, String firstName, String lastName, String email, String phoneNumber, String driverLicenseId, Timestamp createdAt, String imgUrl) {
         IUserBuilder userBuilder;
 
         if("admin".equalsIgnoreCase(role)) {
@@ -23,6 +24,8 @@ public class UserFactory {
         userBuilder.setEmail(email);
         userBuilder.setPhoneNumber(phoneNumber);
         userBuilder.setRole();
+        userBuilder.setCreatedAt(createdAt);
+        userBuilder.setImgUrl(imgUrl);
 
         UserEngineer userEngineer = new UserEngineer(userBuilder);
         userEngineer.constructUser();

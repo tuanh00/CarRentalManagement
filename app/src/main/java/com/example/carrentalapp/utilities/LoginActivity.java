@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.carrentalapp.factories.UserFactory;
+import com.example.carrentalapp.models.User;
 import com.example.carrentalapp.uiactivities.admin.AdminDashboardActivity;
 import com.example.carrentalapp.uiactivities.customer.CustomerDashboardActivity;
 import com.example.carrentalapp.R;
@@ -34,11 +37,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.example.carrentalapp.BuildConfig;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -48,8 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
     private static final int RC_SIGN_IN = 9001;
     private static final List<String> ADMIN_EMAILS = Arrays.asList(
-            "chtuanh265@gmail.com", // Add any additional admin emails here
-            "admin2@gmail.com", "duy.roan@gmail.com"
+            "chtuanh265@gmail.com", "admin2@gmail.com", "duy.roan@gmail.com"
     );
 
     private GoogleSignInClient googleSignInClient;
@@ -62,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Initialize Firebase and Firestore
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
@@ -88,11 +86,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initializeGoogleSignIn() {
-        // Initialize Google Sign-in options
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(BuildConfig.GOOGLE_WEB_CLIENT_ID)
                 .requestEmail()
-                .requestScopes(new Scope(CalendarScopes.CALENDAR)) // Request Calendar scope
+                .requestScopes(new Scope(CalendarScopes.CALENDAR))
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
     }
@@ -121,76 +118,98 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
-                        checkAndSaveGoogleUser(user);
+                        handleGoogleUser(user);
                     } else {
                         Toast.makeText(this, "Firebase Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
-    private void checkAndSaveGoogleUser(FirebaseUser user) {
-        if (user != null) {
-            db.collection("Users").document(user.getUid()).get()
-                    .addOnSuccessListener(document -> {
-                        if (!document.exists()) {
-                            // Determine role based on email
-                            String role = ADMIN_EMAILS.contains(user.getEmail()) ? "admin" : "customer";
 
-                            // Prepare user data with additional fields
-                            Map<String, Object> userData = new HashMap<>();
-                            userData.put("userId", user.getUid());
-                            userData.put("email", user.getEmail());
-                            userData.put("role", role);
-                            userData.put("createdAt", Timestamp.now());
-                            userData.put("imgUrl", null);
-                            userData.put("blocked", false);
+    private void handleGoogleUser(FirebaseUser firebaseUser) {
+        db.collection("Users").document(firebaseUser.getUid()).get()
+                .addOnSuccessListener(document -> {
+                    if (!document.exists()) {
+                        String role = ADMIN_EMAILS.contains(firebaseUser.getEmail()) ? "admin" : "customer";
+                        String firstName = firebaseUser.getDisplayName() != null ? firebaseUser.getDisplayName().split(" ")[0] : "";
+                        String lastName = firebaseUser.getDisplayName() != null ? firebaseUser.getDisplayName().split(" ")[1] : "";
 
-                            String firstName = user.getDisplayName() != null ? user.getDisplayName().split(" ")[0] : "";
-                            String lastName = user.getDisplayName() != null ? user.getDisplayName().split(" ")[1] : "";
-                            userData.put("firstName", firstName);
-                            userData.put("lastName", lastName);
-                            userData.put("imgUrl", null);
-                            userData.put("blocked", false);
+                        User newUser = UserFactory.createUser(
+                                role,
+                                firebaseUser.getUid(),
+                                firstName,
+                                lastName,
+                                firebaseUser.getEmail(),
+                                null, // No phone number
+                                null, // No driver license ID for Google Sign-In
+                                Timestamp.now(),
+                                Uri.parse("android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.drawable.ic_user_avatar_placeholder).toString()
+                        );
 
-                            // Save user data to Firestore and navigate
-                            db.collection("Users").document(user.getUid()).set(userData)
-                                    .addOnSuccessListener(aVoid -> {
-                                        // Save user details to preferences
-                                        saveUserDetailsToPreferences(user.getUid(), user.getEmail(), role, firstName, lastName, null, Timestamp.now());
-                                        // Navigate after saving
-                                        navigateToDashboard(role);
-                                    })
-                                    .addOnFailureListener(e -> Log.e("LoginActivity", "Error adding Google user", e));
-                        } else {
-                            // User already exists in Firestore, retrieve data to save in preferences
-                            String role = document.getString("role");
-                            Boolean isBlocked = document.getBoolean("blocked");
-                            String imgUrl = document.getString("imgUrl");
-                            String firstName = document.getString("firstName");
-                            String lastName = document.getString("lastName");
-                            Timestamp createdAt = document.getTimestamp("createdAt");
+                        saveUserToFirestore(newUser);
+                    } else {
+                        String role = document.getString("role");
+                        String firstName = document.getString("firstName");
+                        String lastName = document.getString("lastName");
+                        String email = document.getString("email");
 
-                            // Check if user is blocked
-                            if (isBlocked != null && isBlocked) {
-                                Toast.makeText(this, "Your account has been blocked. Contact support.", Toast.LENGTH_LONG).show();
-                                mAuth.signOut();
-                                return; // Prevent further execution
-                            }
+                        // Save user details to SharedPreferences
+                        saveUserToPreferences(firebaseUser.getUid(), email, role, firstName, lastName);
 
-                            saveUserDetailsToPreferences(user.getUid(), user.getEmail(), role, firstName, lastName, imgUrl, createdAt);
-                            // Navigate after retrieving role
-                            navigateToDashboard(role);
-                        }
-                    });
-        }
+                        navigateToDashboard(role);
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("LoginActivity", "Error fetching user data", e));
     }
-    private void saveUserDetailsToPreferences(String userId, String email, String role, String firstName, String lastName, String imgUrl, Timestamp createdAt) {
+
+
+    private void saveUserToFirestore(User user) {
+        db.collection("Users").document(user.getUid()).set(user)
+                .addOnSuccessListener(aVoid -> {
+                    saveUserToPreferences(user.getUid(), user.getEmail(), user.getRole(), user.getFirstName(), user.getLastName());
+                    navigateToDashboard(user.getRole());
+                })
+                .addOnFailureListener(e -> Log.e("LoginActivity", "Error saving user data", e));
+    }
+
+
+    private void handleExistingUser(FirebaseUser firebaseUser, String role, Boolean isBlocked) {
+        if (isBlocked != null && isBlocked) {
+            Toast.makeText(this, "Your account is blocked. Contact support.", Toast.LENGTH_LONG).show();
+            mAuth.signOut();
+            return;
+        }
+
+        User existingUser = UserFactory.createUser(
+                role,
+                firebaseUser.getUid(),
+                firebaseUser.getDisplayName() != null ? firebaseUser.getDisplayName().split(" ")[0] : "",
+                firebaseUser.getDisplayName() != null ? firebaseUser.getDisplayName().split(" ")[1] : "",
+                firebaseUser.getEmail(),
+                null, // No phone number
+                null, // No driver license ID
+                Timestamp.now(),
+                Uri.parse("android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.drawable.ic_user_avatar_placeholder).toString()
+        );
+
+        // Extract fields and save to preferences
+        saveUserToPreferences(
+                existingUser.getUid(),
+                existingUser.getEmail(),
+                existingUser.getRole(),
+                existingUser.getFirstName(),
+                existingUser.getLastName()
+        );
+
+        navigateToDashboard(role);
+    }
+
+    private void saveUserToPreferences(String userId, String email, String role, String firstName, String lastName) {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("user_id", userId);
@@ -198,82 +217,10 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString(ROLE_KEY, role);
         editor.putString("first_name", firstName);
         editor.putString("last_name", lastName);
-        editor.putString("imgUrl", imgUrl);
-        editor.putString(GOOGLE_ACCOUNT_NAME_KEY, email); // Save the Google account name
+        editor.putString("last_name", lastName);
         editor.putLong("createdAt", System.currentTimeMillis());
+        editor.putString(GOOGLE_ACCOUNT_NAME_KEY, email); // Save the Google account name
         editor.apply();
-    }
-
-    /**
-     * Determines the navigation flow based on the authentication provider.
-     * @param firebaseUser The authenticated Firebase user.
-     * @param provider The authentication provider ("google" or "password").
-     */
-    private void navigateUser(FirebaseUser firebaseUser, String provider) {
-        if (firebaseUser != null) {
-            if ("google.com".equals(provider)) {
-                checkAndSaveGoogleUser(firebaseUser);
-            } else {
-                checkRoleInFirestore(firebaseUser.getUid());
-            }
-        }
-    }
-
-    /**
-     * Checks the user's role and blocked status in Firestore for email/password sign-in.
-     */
-    private void checkRoleInFirestore(String userId) {
-        db.collection("Users").document(userId).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        String role = documentSnapshot.getString("role");
-                        Boolean isBlocked = documentSnapshot.getBoolean("blocked");
-                        String firstName = documentSnapshot.getString("firstName");
-                        String lastName = documentSnapshot.getString("lastName");
-                        String email = documentSnapshot.getString("email");
-                        String imgUrl = documentSnapshot.getString("imgUrl");
-                        Timestamp createdAt = documentSnapshot.getTimestamp("createdAt");
-
-                        // Check if user is blocked
-                        if (isBlocked != null && isBlocked) {
-                            Toast.makeText(this, "Your account has been blocked. Contact support.", Toast.LENGTH_LONG).show();
-                            mAuth.signOut();
-                            return;
-                        }
-
-                        // Save user details to preferences
-                        saveUserDetailsToPreferences(userId, email, role, firstName, lastName, imgUrl, createdAt);
-
-                        // Navigate to the appropriate dashboard
-                        navigateToDashboard(role);
-
-                    } else {
-                        Toast.makeText(this, "User profile not found.", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Error fetching user data.", Toast.LENGTH_SHORT).show();
-                });
-    }
-
-    private void navigateToDashboard(String role) {
-        if ("admin".equals(role)) {
-            navigateToAdminDashboard();
-        } else {
-            navigateToCustomerDashboard();
-        }
-    }
-
-    private void navigateToAdminDashboard() {
-        Intent intent = new Intent(this, AdminDashboardActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    private void navigateToCustomerDashboard() {
-        Intent intent = new Intent(this, CustomerDashboardActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     private void loginUser() {
@@ -287,7 +234,7 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
                             navigateUser(firebaseUser, "password");
                         } else {
-                            Toast.makeText(LoginActivity.this, "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -310,6 +257,36 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private void navigateUser(FirebaseUser firebaseUser, String provider) {
+        db.collection("Users").document(firebaseUser.getUid()).get()
+                .addOnSuccessListener(document -> {
+                    if (document.exists()) {
+                        String role = document.getString("role");
+                        String firstName = document.getString("firstName");
+                        String lastName = document.getString("lastName");
+                        String email = document.getString("email");
+
+                        // Save user details to SharedPreferences
+                        saveUserToPreferences(firebaseUser.getUid(), email, role, firstName, lastName);
+
+                        // Navigate to the appropriate dashboard
+                        navigateToDashboard(role);
+                    } else {
+                        Toast.makeText(this, "User profile not found. Please register.", Toast.LENGTH_SHORT).show();
+                        mAuth.signOut();
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("LoginActivity", "Error fetching user data", e));
+    }
+
+    private void navigateToDashboard(String role) {
+        Intent intent = "admin".equals(role)
+                ? new Intent(this, AdminDashboardActivity.class)
+                : new Intent(this, CustomerDashboardActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void checkLocationPermission() {
