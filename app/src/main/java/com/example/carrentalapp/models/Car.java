@@ -22,6 +22,7 @@ public class Car {
     @PropertyName("state")
     private CarAvailabilityState currentState;
     private String description;
+    private ArrayList<String> ratedBy;
 
     // Deprecated fields
     @Deprecated
@@ -33,6 +34,7 @@ public class Car {
     // Default constructor (required by Firebase)
     public Car() {
         this.images = new ArrayList<>();
+        this.ratedBy = new ArrayList<>();
     }
 
     // Custom constructor for creating a new car
@@ -43,6 +45,9 @@ public class Car {
         this.location = location;
         this.price = price;
         this.images = new ArrayList<>();
+        this.ratedBy = new ArrayList<>();
+        this.rating = 0f;
+        this.ratingCount = 0;
         this.currentState = CarAvailabilityState.AVAILABLE; // Default to AVAILABLE when creating a new car
     }
 
@@ -139,8 +144,14 @@ public class Car {
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
+
     public String getDescription() {return description;}
+
     public void setDescription(String description) {this.description = description;}
+
+    public ArrayList<String> getRatedBy() { return ratedBy; }
+
+    public void setRatedBy(ArrayList<String> ratedBy) { this.ratedBy = ratedBy; }
     // Deprecated getters and setters
     @Deprecated
     public double getLatitude() { return latitude; }

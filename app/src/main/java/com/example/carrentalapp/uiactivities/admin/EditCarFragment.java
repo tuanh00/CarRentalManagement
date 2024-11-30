@@ -1,4 +1,3 @@
-// EditCarFragment.java
 package com.example.carrentalapp.uiactivities.admin;
 
 import static android.app.Activity.RESULT_OK;
@@ -16,6 +15,8 @@ import android.widget.Button;
 import androidx.appcompat.widget.SwitchCompat;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,12 +43,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
 public class EditCarFragment extends Fragment {
 
     private EditText brandEditText, modelEditText, seatsEditText, priceEditText, locationEditText, descriptionEditText;
+    private RatingBar ratingBar;
+    private TextView ratingCountTextView;
     private SwitchCompat availabilitySwitch;
     private ImageView carImageView;
     private Button buttonEditImages, buttonSaveCarDetails;
@@ -99,6 +103,8 @@ public class EditCarFragment extends Fragment {
         buttonEditImages = view.findViewById(R.id.buttonEditImage);
         buttonSaveCarDetails = view.findViewById(R.id.saveButton);
         imageRecyclerView = view.findViewById(R.id.imageRecyclerView);
+        ratingBar = view.findViewById(R.id.carRatingBar);
+        ratingCountTextView = view.findViewById(R.id.textViewRatingCount);
 
         // Initialize image list and adapter
         imagePreviewAdapter = new ImagePreviewAdapter(getContext(), imageUris, position -> confirmImageRemoval(position));
@@ -128,6 +134,8 @@ public class EditCarFragment extends Fragment {
             double carPrice = bundle.getDouble("carPrice", 0.0);
             String carLocation = bundle.getString("carLocation", "");
             CarAvailabilityState availabilityState = CarAvailabilityState.valueOf(bundle.getString("state", CarAvailabilityState.AVAILABLE.toString()));
+            double carRating = bundle.getDouble("rating", 0.0);
+            int carRatingCount = bundle.getInt("ratingCount", 0);
 
             // Populate UI elements with car data
             brandEditText.setText(carBrand);
@@ -137,7 +145,8 @@ public class EditCarFragment extends Fragment {
             priceEditText.setText(String.valueOf(carPrice));
             locationEditText.setText(carLocation);
             availabilitySwitch.setChecked(availabilityState == CarAvailabilityState.AVAILABLE);
-
+            ratingBar.setRating((float) carRating);
+            ratingCountTextView.setText(String.format(Locale.getDefault(), "(%d ratings)", carRatingCount));
             // Load existing images
             ArrayList<String> existingImageUrls = bundle.getStringArrayList("carImageUrls");
             if (existingImageUrls != null && !existingImageUrls.isEmpty()) {
@@ -325,12 +334,30 @@ public class EditCarFragment extends Fragment {
         carData.put("images", imageUrls);
         carData.put("updatedAt", FieldValue.serverTimestamp());
 
-        db.collection("Cars").document(carId).update(carData)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(getContext(), "Car details updated successfully", Toast.LENGTH_SHORT).show();
-                    navigateToAdminDashboard(); // Navigate to Admin Dashboard after update
+        // Retain existing rating and ratingCount
+        db.collection("Cars").document(carId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        double rating = documentSnapshot.getDouble("rating");
+                        long ratingCount = documentSnapshot.getLong("ratingCount");
+
+                        carData.put("rating",rating);
+                        carData.put("ratingCount", ratingCount);
+
+                        // Update Firestore
+                        db.collection("Cars").document(carId).update(carData)
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(getContext(), "Car details updated successfully", Toast.LENGTH_SHORT).show();
+                                    navigateToAdminDashboard();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(getContext(), "Failed to update car: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    }
                 })
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to update car: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Error retrieving car details: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
     /**

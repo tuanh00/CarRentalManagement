@@ -227,6 +227,7 @@ public class RentCarFragment extends Fragment {
         contractData.put("totalPayment", totalPayment);
         contractData.put("status", ContractState.ACTIVE);
         contractData.put("eventId", eventId);
+        contractData.put("rated", false);
 
         db.collection("Contracts").add(contractData)
                 .addOnSuccessListener(documentReference -> {

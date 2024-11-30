@@ -1,4 +1,3 @@
-<!-- item_contract.xml -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
@@ -94,19 +93,32 @@
         <Button
             android:id="@+id/buttonViewDetails"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:text="View Details"
             android:backgroundTint="@color/primaryColor"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:contentDescription="@string/view_details_button_description" />
 
         <Button
             android:id="@+id/buttonEditContract"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:text="Edit"
             android:backgroundTint="@color/primaryColor"
             android:textColor="@android:color/white"
             android:layout_marginStart="8dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:contentDescription="@string/edit_contract_button_description" />
+
+        <Button
+            android:id="@+id/buttonRateExperience"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="Rate Your Experience"
+            android:visibility="gone"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@android:color/white"
+            android:contentDescription="@string/rate_experience_button_description" />
     </LinearLayout>
 </LinearLayout>

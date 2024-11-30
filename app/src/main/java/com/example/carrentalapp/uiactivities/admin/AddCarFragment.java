@@ -220,9 +220,10 @@ public class AddCarFragment extends Fragment {
         carData.put("seats", seats);
         carData.put("price", price);
         carData.put("location", location);
-        carData.put("images", images); // Store full URLs here
+        carData.put("images", images);
         carData.put("rating", 0f);
         carData.put("ratingCount", 0);
+        carData.put("ratedBy", new ArrayList<>());
         carData.put("createdAt", FieldValue.serverTimestamp());
         carData.put("state", CarAvailabilityState.AVAILABLE.toString());
 

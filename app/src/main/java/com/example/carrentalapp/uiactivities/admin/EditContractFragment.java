@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.carrentalapp.R;
+import com.example.carrentalapp.states.car.CarAvailabilityState;
 import com.example.carrentalapp.states.contract.ContractState;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
@@ -173,10 +174,20 @@ public class EditContractFragment extends Fragment {
         updates.put("status", newStatus.toString());
         updates.put("updateDate", FieldValue.serverTimestamp());
 
-        // Directly update the document using the contractId
+        // Update the document using the contractId
         db.collection("Contracts").document(contractId).update(updates)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(getContext(), "Contract status updated to " + newStatus, Toast.LENGTH_SHORT).show();
+
+                    // If the new status is COMPLETED or CANCELED, update the car status to AVAILABLE
+                    if (newStatus == ContractState.COMPLETED || newStatus == ContractState.CANCELED) {
+                        String carId = carIdTextView.getText().toString(); // Retrieve the car ID from the UI
+                        if (!TextUtils.isEmpty(carId) && !"N/A".equals(carId)) {
+                            updateCarStatusToAvailable(carId);
+                        } else {
+                            Toast.makeText(getContext(), "Car ID is invalid or not found", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
                     // Notify the ViewContractsFragment of the update
                     getParentFragmentManager().setFragmentResult("contractUpdated", new Bundle());
@@ -186,6 +197,22 @@ public class EditContractFragment extends Fragment {
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), "Failed to update contract: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    /**
+     * Updates the car status to AVAILABLE in Firestore.
+     */
+    private void updateCarStatusToAvailable(String carId) {
+        Map<String, Object> carUpdates = new HashMap<>();
+        carUpdates.put("state", CarAvailabilityState.AVAILABLE.toString());
+
+        db.collection("Cars").document(carId).update(carUpdates)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getContext(), "Car status updated to AVAILABLE", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Failed to update car status: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 

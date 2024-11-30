@@ -18,9 +18,11 @@ public class Contract {
     private double totalPayment;
     private ContractState state;
     private String eventId;
+    private boolean rated;
 
     public Contract() {
-        this.state = ContractState.ACTIVE; // Default state
+        this.state = ContractState.ACTIVE;
+        this.rated = false;
     }
 
     // Getters and Setters
@@ -74,4 +76,7 @@ public class Contract {
 
     public void setEventId(String eventId) { this.eventId = eventId; }
 
+    public boolean isRated() { return rated; }
+
+    public void setRated(boolean rated) { this.rated = rated; }
 }

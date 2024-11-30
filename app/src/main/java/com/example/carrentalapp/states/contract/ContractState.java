@@ -4,5 +4,4 @@ public enum ContractState {
     ACTIVE,
     CANCELED,
     COMPLETED
-
 }

@@ -22,6 +22,28 @@
             android:src="@drawable/car_placeholder"
             android:contentDescription="Car Image" />
 
+        <!-- Rating Bar -->
+        <RatingBar
+            android:id="@+id/carRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:isIndicator="true"
+            style="?android:attr/ratingBarStyleSmall"
+            android:progressTint="@color/secondaryLightColor"
+            android:secondaryProgressTint="@color/secondaryLightColor"
+            android:backgroundTint="@color/secondaryLightColor" />
+
+        <!-- Rating Count -->
+        <TextView
+            android:id="@+id/textViewRatingCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginStart="8dp"
+            android:textColor="@android:color/darker_gray" />
+
         <!-- Brand Input -->
         <TextView
             android:id="@+id/textViewBrandLabel"
