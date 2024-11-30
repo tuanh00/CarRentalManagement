@@ -1,4 +1,3 @@
-<!-- res/layout/dialog_rating.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -21,7 +20,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:numStars="5"
-        android:stepSize="1.0" />
+        android:stepSize="0.5"
+        android:progressTint="@color/secondaryLightColor"
+        android:secondaryProgressTint="@color/secondaryLightColor"
+        android:backgroundTint="@color/secondaryLightColor"
+        />
 
     <Button
         android:id="@+id/submitRatingButton"
