@@ -21,9 +21,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.example.carrentalapp.R;
+import com.example.carrentalapp.adapters.CarImageAdapter;
 import com.example.carrentalapp.uiactivities.admin.ViewContractsFragment;
 import com.example.carrentalapp.states.car.CarAvailabilityState;
 import com.example.carrentalapp.states.contract.ContractState;
@@ -112,6 +114,7 @@ public class RentCarFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Bind views
+        ViewPager2 carImageSlider = view.findViewById(R.id.carImageSlider);
         TextView carBrandModelTextView = view.findViewById(R.id.carBrandModel);
         TextView carDescriptionTextView = view.findViewById(R.id.carDescription);
         TextView carLocationTextView = view.findViewById(R.id.carLocation);
@@ -147,9 +150,10 @@ public class RentCarFragment extends Fragment {
             carRatingBar.setRating(carRating);
             ratingCountTextView.setText(String.format("%.1f", carRating));
 
+            // Set up the image slider
             if (carImageUrls != null && !carImageUrls.isEmpty()) {
-                String carImageUrl = carImageUrls.get(0); // Use the first image as a preview
-                Glide.with(this).load(carImageUrl).into(carImage);
+                CarImageAdapter adapter = new CarImageAdapter(getContext(), carImageUrls);
+                carImageSlider.setAdapter(adapter);
             } else {
                 carImage.setImageResource(R.drawable.car_placeholder); // Fallback if no image URL is available
             }

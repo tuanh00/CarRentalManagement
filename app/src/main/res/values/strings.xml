@@ -8,6 +8,7 @@
     <string name="rate_experience_button_description">Rate Experience Button</string>
     <string name="view_details_button_description">View Details Button</string>
     <string name="edit_contract_button_description">Edit Contract Button</string>
+    <string name="car_image">Car Image</string>
 </resources>
 
 

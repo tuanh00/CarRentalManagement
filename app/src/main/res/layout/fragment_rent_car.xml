@@ -9,13 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Car Image -->
-        <ImageView
-            android:id="@+id/carImage"
+        <!-- Car Image Slider -->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/carImageSlider"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:scaleType="centerInside"
-            android:adjustViewBounds="true" />
+            android:layout_marginBottom="8dp" />
 
         <!-- Car Details -->
         <TextView
