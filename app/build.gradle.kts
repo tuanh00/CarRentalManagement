@@ -17,6 +17,7 @@ if (localPropertiesFile.exists()) {
     throw FileNotFoundException("local.properties file not found. Please create one and add your API keys.")
 }
 
+
 android {
     namespace = "com.example.carrentalapp"
     compileSdk = 34
@@ -34,6 +35,7 @@ android {
         buildConfigField("String", "GOOGLE_MAPS_API_KEY", "\"${localProperties["GOOGLE_MAPS_API_KEY"]}\"")
         buildConfigField("String", "STRIPE_PUBLISHABLE_KEY", "\"${localProperties["STRIPE_PUBLISHABLE_KEY"]}\"")
         buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"${localProperties["GOOGLE_WEB_CLIENT_ID"]}\"")
+        buildConfigField("String", "ADMIN_EMAILS", "\"${localProperties["ADMIN_EMAILS"]}\"")
 
     }
 
@@ -113,14 +115,14 @@ dependencies {
     //Stripe API
     implementation("com.stripe:stripe-android:20.14.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3") // Optional, for logging
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
 
     //Google Map API
     implementation("com.google.android.gms:play-services-maps:18.1.0")
 
     // Google Places API
     implementation("com.google.android.libraries.places:places:3.2.0")
-    implementation("com.google.android.gms:play-services-location:21.0.1") // Latest version as of now
+    implementation("com.google.android.gms:play-services-location:21.0.1") 
 
     //Add WorkManager Dependency:
     implementation("androidx.work:work-runtime:2.7.1")

@@ -48,9 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String GOOGLE_ACCOUNT_NAME_KEY = "google_account_name";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
     private static final int RC_SIGN_IN = 9001;
-    private static final List<String> ADMIN_EMAILS = Arrays.asList(
-            "chtuanh265@gmail.com", "admin2@gmail.com", "duy.roan@gmail.com"
-    );
+
 
     private GoogleSignInClient googleSignInClient;
     private EditText emailEditText, passwordEditText;
@@ -132,11 +130,15 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    private static List<String> getAdminEmails() {
+        return Arrays.asList(BuildConfig.ADMIN_EMAILS.split(","));
+    }
+
     private void handleGoogleUser(FirebaseUser firebaseUser) {
         db.collection("Users").document(firebaseUser.getUid()).get()
                 .addOnSuccessListener(document -> {
                     if (!document.exists()) {
-                        String role = ADMIN_EMAILS.contains(firebaseUser.getEmail()) ? "admin" : "customer";
+                        String role = getAdminEmails().contains(firebaseUser.getEmail()) ? "admin" : "customer";
                         String firstName = firebaseUser.getDisplayName() != null ? firebaseUser.getDisplayName().split(" ")[0] : "";
                         String lastName = firebaseUser.getDisplayName() != null ? firebaseUser.getDisplayName().split(" ")[1] : "";
 
