@@ -134,7 +134,7 @@ public class EditCarFragment extends Fragment {
             double carPrice = bundle.getDouble("carPrice", 0.0);
             String carLocation = bundle.getString("carLocation", "");
             CarAvailabilityState availabilityState = CarAvailabilityState.valueOf(bundle.getString("state", CarAvailabilityState.AVAILABLE.toString()));
-            double carRating = bundle.getDouble("rating", 0.0);
+            float carRating = bundle.getFloat("rating", 0.0f);
             int carRatingCount = bundle.getInt("ratingCount", 0);
 
             // Populate UI elements with car data
@@ -145,8 +145,8 @@ public class EditCarFragment extends Fragment {
             priceEditText.setText(String.valueOf(carPrice));
             locationEditText.setText(carLocation);
             availabilitySwitch.setChecked(availabilityState == CarAvailabilityState.AVAILABLE);
-            ratingBar.setRating((float) carRating);
-            ratingCountTextView.setText(String.format(Locale.getDefault(), "(%d ratings)", carRatingCount));
+            ratingBar.setRating(carRating);
+            ratingCountTextView.setText(Integer.toString(carRatingCount) + " ratings");
             // Load existing images
             ArrayList<String> existingImageUrls = bundle.getStringArrayList("carImageUrls");
             if (existingImageUrls != null && !existingImageUrls.isEmpty()) {

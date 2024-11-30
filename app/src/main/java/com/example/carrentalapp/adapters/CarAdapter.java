@@ -97,6 +97,8 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
                 bundleEdit.putStringArrayList("carImageUrls", new ArrayList<>(car.getImages()));
                 bundleEdit.putString("state", car.getCurrentState().toString());
                 bundleEdit.putString("carDescription", car.getDescription());
+                bundleEdit.putFloat("rating", car.getRating());
+                bundleEdit.putInt("ratingCount", car.getRatingCount());
 
                 editCarFragment.setArguments(bundleEdit);
 
