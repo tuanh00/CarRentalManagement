@@ -91,6 +91,14 @@
             android:hint="Password"
             android:inputType="textPassword" />
 
+        <TextView
+            android:id="@+id/passwordStrengthText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Password Strength"
+            android:textColor="@android:color/black"
+            android:visibility="gone" />
+
         <!-- Confirm Password Input Field -->
         <EditText
             android:id="@+id/confirmPasswordRegistration"

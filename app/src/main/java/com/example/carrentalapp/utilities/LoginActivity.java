@@ -137,6 +137,12 @@ public class LoginActivity extends AppCompatActivity {
     private void handleGoogleUser(FirebaseUser firebaseUser) {
         db.collection("Users").document(firebaseUser.getUid()).get()
                 .addOnSuccessListener(document -> {
+                    if (document.exists() && document.contains("blocked") && document.getBoolean("blocked")) {
+                        Toast.makeText(this, "Your account is blocked. Please contact support.", Toast.LENGTH_SHORT).show();
+                        mAuth.signOut(); // Sign out the user
+                        return;
+                    }
+
                     if (!document.exists()) {
                         String role = getAdminEmails().contains(firebaseUser.getEmail()) ? "admin" : "customer";
                         String firstName = firebaseUser.getDisplayName() != null ? firebaseUser.getDisplayName().split(" ")[0] : "";
@@ -234,6 +240,12 @@ public class LoginActivity extends AppCompatActivity {
     private void navigateUser(FirebaseUser firebaseUser, String provider) {
         db.collection("Users").document(firebaseUser.getUid()).get()
                 .addOnSuccessListener(document -> {
+                    if (document.exists() && document.contains("blocked") && document.getBoolean("blocked")) {
+                        Toast.makeText(this, "Your account is blocked. Please contact support.", Toast.LENGTH_SHORT).show();
+                        mAuth.signOut(); // Sign out the user
+                        return;
+                    }
+
                     if (document.exists()) {
                         String role = document.getString("role");
                         String firstName = document.getString("firstName");

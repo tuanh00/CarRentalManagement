@@ -4,8 +4,11 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Patterns;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -36,7 +39,9 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private static final String CANADIAN_PHONE_PATTERN = "^(\\+1[-.\\s]?)?\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}$";
     private static final String DRIVER_LICENSE_PATTERN = "^\\d{6}$";
+    private static final String PASSWORD_PATTERN = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*(),.?\":{}|<>])[A-Za-z\\d!@#$%^&*(),.?\":{}|<>]{8,}$";
     private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private TextView passwordStrengthText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
         confirmPasswordEditText = findViewById(R.id.confirmPasswordRegistration);
         registerButton = findViewById(R.id.registerbtn);
         loginLink = findViewById(R.id.loginLink);
+        passwordStrengthText = findViewById(R.id.passwordStrengthText);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -64,6 +70,79 @@ public class RegisterActivity extends AppCompatActivity {
             finish();
         });
         registerButton.setOnClickListener(v -> registerUser());
+
+        // real-time check for password
+        passwordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                String password = charSequence.toString();
+
+                if (!password.isEmpty()) {
+                    passwordStrengthText.setVisibility(View.VISIBLE);  // Show text
+                } else {
+                    passwordStrengthText.setVisibility(View.GONE);  // Hide text when empty
+                }
+
+                int strength = getPasswordStrength(password);
+                updatePasswordStrengthUI(strength);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
+
+
+    }
+
+    private void updatePasswordStrengthUI(int strength) {
+        switch (strength) {
+            case 0:
+                passwordStrengthText.setText("Very Weak");
+                passwordStrengthText.setTextColor(getResources().getColor(R.color.holo_red_dark));
+                break;
+            case 1:
+            case 2:
+                passwordStrengthText.setText("Weak");
+                passwordStrengthText.setTextColor(getResources().getColor(R.color.secondaryDarkColor));
+                break;
+            case 3:
+                passwordStrengthText.setText("Good");
+                passwordStrengthText.setTextColor(getResources().getColor(R.color.secondaryColor)); // Yellow for good
+                break;
+            case 4:
+                passwordStrengthText.setText("Strong");
+                passwordStrengthText.setTextColor(getResources().getColor(R.color.secondaryLightColor)); // Green for strong
+                break;
+            case 5:
+                passwordStrengthText.setText("Very Strong");
+                passwordStrengthText.setTextColor(getResources().getColor(R.color.colorActive));
+                break;
+        }
+    }
+
+    private int getPasswordStrength(String password) {
+        int strength = 0;
+
+        // Check for length (at least 8 characters)
+        if (password.length() >= 8) strength++;
+
+        // Check for at least one uppercase letter
+        if (password.matches(".*[A-Z].*")) strength++;
+
+        // Check for at least one lowercase letter
+        if (password.matches(".*[a-z].*")) strength++;
+
+        // Check for at least one number
+        if (password.matches(".*[0-9].*")) strength++;
+
+        // Check for at least one special character
+        if (password.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) strength++;
+
+        // Return the calculated strength, with a max of 5 for strong password criteria
+        return strength;
     }
 
     private void registerUser() {
@@ -133,6 +212,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (TextUtils.isEmpty(password)) {
             passwordEditText.setError("Password is required");
+            passwordEditText.requestFocus();
+            return;
+        }
+
+        if (!password.matches(PASSWORD_PATTERN)) {
+            passwordEditText.setError("Password must be at least 8 characters long, contain 1 uppercase, 1 lowercase, 1 special character, and no spaces.");
             passwordEditText.requestFocus();
             return;
         }
