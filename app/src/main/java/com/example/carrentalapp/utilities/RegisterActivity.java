@@ -100,23 +100,28 @@ public class RegisterActivity extends AppCompatActivity {
     private void updatePasswordStrengthUI(int strength) {
         switch (strength) {
             case 0:
+
                 passwordStrengthText.setText("Very Weak");
                 passwordStrengthText.setTextColor(getResources().getColor(R.color.holo_red_dark));
                 break;
             case 1:
             case 2:
+                //pass or Pass or pass12
                 passwordStrengthText.setText("Weak");
                 passwordStrengthText.setTextColor(getResources().getColor(R.color.secondaryDarkColor));
                 break;
             case 3:
+                //Pass12
                 passwordStrengthText.setText("Good");
                 passwordStrengthText.setTextColor(getResources().getColor(R.color.secondaryColor)); // Yellow for good
                 break;
             case 4:
+                //password%12
                 passwordStrengthText.setText("Strong");
                 passwordStrengthText.setTextColor(getResources().getColor(R.color.secondaryLightColor)); // Green for strong
                 break;
             case 5:
+                //Password%12
                 passwordStrengthText.setText("Very Strong");
                 passwordStrengthText.setTextColor(getResources().getColor(R.color.colorActive));
                 break;
