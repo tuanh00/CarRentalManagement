@@ -8,6 +8,15 @@ This repository contains the **Car Rental Management App**, a comprehensive Andr
 
 The **Car Rental Management App** is designed to simplify car rental processes through features like user authentication, car management, rental bookings, and secure payment processing. Built using modern tools and technologies, the app provides a seamless experience for both customers and administrators.
 
+---
+
+# 🚫 Project Status: Closed
+
+This project scored **76.67%** during evaluation.
+This project is no longer under active development. **Please download and experience it yourself.** Consider it as a **reference project** for learning and inspiration. Contributions or updates will not be made.
+
+---
+
 ## 📝 Key Features
 
 ### **Customer's Side**
@@ -90,17 +99,3 @@ The **Car Rental Management App** is designed to simplify car rental processes t
 - **`node_modules/`**: Dependencies for Stripe API and other backend integrations.
 - **`.env`**: Environment variables for API keys.
 - **`server.js`**: Node.js server file for Stripe API.
-
----
-
-## 🎯 Score: 23/30
-
-This project scored **23/30** during evaluation.
-
----
-
-# 🚫 Project Status: Closed
-
-This project is no longer under active development. **Please download and experience it yourself.** Consider it as a **reference project** for learning and inspiration. Contributions or updates will not be made.
-
----
